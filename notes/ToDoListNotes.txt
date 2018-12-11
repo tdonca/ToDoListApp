@@ -32,5 +32,14 @@ Main Activity:
 		Create a TextView instance
 		**Set its layout parameters by getting the LayoutParams of the parent view
 		add to the target view with (target).addView(newView);
-		
+
+
+	Make Tasks Removeable:
+		create an onClickListener that removes the view from the parent view when clicked
+		new View.OnClickListener() { ...
+		assign the listener to each task view object
+
+
+	
+
 

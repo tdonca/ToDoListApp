@@ -7,12 +7,16 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Vector;
+
 public class MainListActivity extends AppCompatActivity {
 
     private String task1 = "Wake up";
     private String task2 = "Eat";
     private String task3 = "Go to library";
 
+    private Vector<String> tasks;
+    private Vector<TextView> task_views;
     private ViewGroup task_layout;
 
 
@@ -25,6 +29,13 @@ public class MainListActivity extends AppCompatActivity {
         task_layout = findViewById(R.id.main_task_layout);
 
 
+        // simulate loading the tasks from memory
+        tasks = new Vector<>();
+        tasks.add("Wake up");
+        tasks.add("Eat");
+        tasks.add("Go to library");
+
+
         // create clickListener
         View.OnClickListener remove_task_listener = new View.OnClickListener() {
             @Override
@@ -35,30 +46,19 @@ public class MainListActivity extends AppCompatActivity {
 
 
         // set up TextViews and their parent parameters
-        final TextView task1_view = new TextView(this);
-        task1_view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                                                                    LinearLayout.LayoutParams.WRAP_CONTENT));
-        task1_view.setText(task1);
-        task1_view.setTextSize(48);
-        task1_view.setOnClickListener(remove_task_listener);
+        task_views = new Vector<>();
+        for(int i = 0; i < tasks.size(); ++i){
 
-        TextView task2_view = new TextView(this);
-        task2_view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                                                                    LinearLayout.LayoutParams.WRAP_CONTENT));
-        task2_view.setText(task2);
-        task2_view.setTextSize(48);
-        task2_view.setOnClickListener(remove_task_listener);
+            task_views.add( new TextView(this) );
+            task_views.get(i).setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                                                                        LinearLayout.LayoutParams.WRAP_CONTENT));
+            task_views.get(i).setText(tasks.get(i));
+            task_views.get(i).setTextSize(48);
+            task_views.get(i).setOnClickListener(remove_task_listener);
 
-        TextView task3_view = new TextView(this);
-        task3_view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                                                                    LinearLayout.LayoutParams.WRAP_CONTENT));
-        task3_view.setText(task3);
-        task3_view.setTextSize(48);
-        task3_view.setOnClickListener(remove_task_listener);
+            task_layout.addView(task_views.get(i));
+        }
 
-        // add the tasks to the view
-        task_layout.addView(task1_view);
-        task_layout.addView(task2_view);
-        task_layout.addView(task3_view);
+
     }
 }
