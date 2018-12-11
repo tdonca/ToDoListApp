@@ -1,0 +1,36 @@
+====================================================12/10/2018
+
+To Do List App.
+
+Features:
+	Display entries in a List View
+	Create new entries
+	Delete entries
+	Save user data so entries are persistent
+	Create future reminder notifications (background)
+
+
+------------------------------
+
+
+1. Create list view for entries
+	Linear Layout
+	TextView objects as simple entries
+	Tap TextView to delete
+	Tap + button to add new entries in a new activity
+
+
+Main Activity:
+	Linear Layout of TextView objects
+	Linear Layout Info: https://developer.android.com/reference/android/widget/LinearLayout
+
+
+	I want on startup to load all saved tasks into memory, then create a TextView for
+	each one to display in the linear layout
+
+	Create TextView in onCreate():
+		Create a TextView instance
+		**Set its layout parameters by getting the LayoutParams of the parent view
+		add to the target view with (target).addView(newView);
+		
+
