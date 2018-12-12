@@ -41,5 +41,46 @@ Main Activity:
 
 
 	
+	Create new tasks:
+
+		Add FloatingActionButton from Basic Activity Template
+			Requires a CoordinatorLayout	
+
+===================================================================================12/11/18
+
+		OnClick:
+			launch a new activity that takes in a string and returns a new task to the main activity
 
 
+
+Create Task Activity:
+	
+	using onClick in Main Activity
+	first create a new activity in the project
+	add it to the manifest, and set it as a child of the main activity
+
+	create a new intent for the create task activity
+		 Intent new_task_intent = new Intent(this, CreateTaskActivity.class);
+        startActivityForResult(new_task_intent, TEXT_REQUEST);
+
+    use callback for receiving the response:
+    	public void onActivityResult( int request_code, int result_code, Intent data ){ ...
+
+
+
+
+Store Tasks in a file on internal storage:
+	
+	maintain a file that holds the active tasks
+
+	on app create:
+		try openFileInput()
+			read strings and add to task list 
+		catch FileNotFoundException
+
+
+	on app close:
+		delete the existing file
+		openFileOutput()
+		write current task strings
+		close file
