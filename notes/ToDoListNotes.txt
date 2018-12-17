@@ -1,4 +1,4 @@
-====================================================12/10/2018
+============================================================12/10/2018
 
 To Do List App.
 
@@ -74,13 +74,72 @@ Store Tasks in a file on internal storage:
 	maintain a file that holds the active tasks
 
 	on app create:
-		try openFileInput()
-			read strings and add to task list 
-		catch FileNotFoundException
+		use BufferedReader on the file
 
 
 	on app close:
-		delete the existing file
-		openFileOutput()
-		write current task strings
-		close file
+		delete any existing file
+		use BufferedWriter on the file
+
+===============================================================================12/12/18
+
+
+Find a way to uniquely access each task when it is tapped
+
+Be able to remove a task from the data structure correctly when the TextView is tapped
+
+================================================================================12/17/18
+
+
+Learning about App Architecture Design:
+
+O.O. Principles, Separation of Responsibility:
+	Separate UI and Functionality
+
+	Activity -> Context: Access to Platform Features and Resources
+
+	Can't separate Functionality from Activity, so separate UI
+
+
+
+Model-View-Presenter:
+	
+	Model - Data and internal processing / functionality
+
+	View - Passive UI Display and Interaction Catching (Activity)
+
+	Presenter - Communication between View and Model, handling view updates and user input processing
+
+
+
+
+Splitting UI and Functionality using MVP:
+	
+	View displays tasks in order
+	Presenter gets task names and order from Model
+	Model gets strings from file and creates Task objects
+
+
+
+
+View:
+	MainActivity, NewTaskActivity
+	OnCreate, loadUI objects
+	onClick() stuff - call Presenter functions to handle
+
+Presenter:
+	call View functions to display tasks
+	call View function to load new Activity
+	receive deletedTask or newTasks calls
+	add/remove tasks from Model
+
+Model:
+	load tasks from file
+	receive new tasks from presenter
+	save tasks to file on exit
+
+
+
+
+
+
