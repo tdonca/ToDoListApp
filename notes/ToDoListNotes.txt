@@ -140,6 +140,71 @@ Model:
 
 
 
+====================================================================12/19/18
 
 
+Using MVP todoapp example to implement MVP: https://github.com/googlesamples/android-architecture/tree/todo-mvp
 
+Stick with One Activity Per UI View, and use Intents to pass model data - Parcelable/Serializeable
+
+====================================================================12/20/18
+
+
+Interative Progress:
+	1. Get base functionality working (list view, adapter, adding/removing tasks, saving to file)
+	2. Difference between Back button and finish() intent return for activity lifecycles
+	3. Implement MVP w/ Intents between activities (w/ Serializeable)
+
+
+1. Base Functionality
+	
+	Adapter for lists
+		ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, values)
+
+		1. Create the adapter that handles a set of data (ArrayList in this case)
+		2. Assign the adapter to an existing viewgroup that will hold the UI elements
+		3. Add data elements to the data (automatically added to views through adapter)
+
+	Allow onClick events:
+		create a onClick listener for the ListView directly, not the individual elements.
+		This way the ListView can keep track of which element is clicked, allowing easy element modification without lookup
+
+	Add elements:
+		add using Adapter.add() to automatically display the new UI element
+
+	Delete elements:
+		remove using array index obtained from the ListView Elements
+		remove from data source directly ArrayList.remove()
+		** this means we have to update the adapter to remove the UI element
+		Adapter.notifyDataSetChanged()
+		since the adapter has a reference to an underlying array, it does not keep track of its modifications in real time, so we 
+		have to tell it that the array changed
+
+
+	Save tasks to file:
+		Commons.io library
+		import library through Gradle in app's build.gradle file:
+
+			repositories {
+    			...
+    			mavenCentral()
+			}
+			... 
+			dependencies {
+				...
+				implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+			}
+				
+
+		Read from file:
+			get the app files directory using getFilesDir()
+			create a File object for the file
+			get an ArrayList of strings from the lines of the text file:
+				arraylist = FileUtils.readLines(filename, "UTF-8");
+
+
+		Write to file:
+			use the elements of an ArrayList as lines to write to the text file:
+				FileUtils.writeLines(filename, arraylist);
+
+		***Always use try/catch exception handling when dealing with I/O***

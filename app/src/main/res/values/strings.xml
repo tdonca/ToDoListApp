@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">ToDoList</string>
+    <string name="app_name">My Tasks</string>
     <string name="edit_new_task_hint">Create new task</string>
     <string name="create_new_task_button_text">Create</string>
+    <string name="add_item_button_text">Add</string>
+    <string name="edit_task_text">Enter a new task</string>
+    <string name="main_action_bar">My Tasks</string>
 </resources>

@@ -7,8 +7,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.apache.commons.io.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,153 +24,101 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class MainListActivity extends AppCompatActivity {
 
-    private String task1 = "Wake up";
-    private String task2 = "Eat";
-    private String task3 = "Go to library";
-    private String filename = "MyTasksFile";
-    private BufferedReader in;
-    private BufferedWriter out;
-    private Vector<String> tasks;
-    private Vector<TextView> task_views;
-    private ViewGroup task_layout;
+    private String filename = "MyTasks.txt";
+    private ArrayList<String> tasks;
+    private ArrayAdapter<String> tasks_adapter;
+    private ListView task_list_view;
+    private EditText new_task_text;
 
-
-    
-    public static final int TEXT_REQUEST = 1;
-
-    // create clickListener
-    View.OnClickListener remove_task_listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            task_layout.removeView(v);
-
-        }
-    };
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
-        task_layout = findViewById(R.id.main_task_layout);
-        tasks = new Vector<>();
-        task_views = new Vector<>();
+        task_list_view = findViewById(R.id.task_list);
+        new_task_text = findViewById(R.id.new_task_edit);
+        tasks = new ArrayList<>();
+
+        // load saved tasks from memory
+        readTasksFromFile();
+
+        // create adapter for task list
+        tasks_adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasks);
+        // assign adapter to a UI viewgroup
+        task_list_view.setAdapter(tasks_adapter);
 
 
-        try{
-            // load the tasks from memory
-            File file = new File(this.getFilesDir(), filename);
-            if(file.exists()){
-                in = new BufferedReader(new FileReader(file));
-                String line;
-                while( (line = in.readLine()) != null ){
-                    tasks.add(line);
-                }
+        // setup click listener for listView
+        // having the click handler on the listView
+        setupListViewListener();
 
-                // delete file
-                file.delete();
+        // display help toast
+        Toast.makeText(this, "Tap and hold to remove tasks", Toast.LENGTH_SHORT).show();
+    }
+
+    private void setupListViewListener() {
+        task_list_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                // remove directly from data set
+                tasks.remove(position);
+                // update display through adapter
+                tasks_adapter.notifyDataSetChanged();
+                // save change to file
+                writeTasksToFile();
+                return true;
             }
-        }
-        catch (Exception e){
-            Log.e("MainListActivity", "READING FROM FILE FAILED");
-            e.printStackTrace();
-        }
-        finally{
-            try{
-                in.close();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
-
-
-        // set up TextViews and their parent parameters
-        Log.d("MainListActivity", "Number of tasks read: " + tasks.size());
-        for(int i = 0; i < tasks.size(); ++i){
-
-            task_views.add( new TextView(this) );
-            task_views.get(i).setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
-            task_views.get(i).setText(tasks.get(i));
-            task_views.get(i).setTextSize(48);
-            task_views.get(i).setOnClickListener(remove_task_listener);
-
-            task_layout.addView(task_views.get(i));
-        }
-
-
-
+        });
 
     }
 
     public void createTask(View view) {
 
-        // launch new activity to create task
-        Intent new_task_intent = new Intent(this, CreateTaskActivity.class);
-        startActivityForResult(new_task_intent, TEXT_REQUEST);
-
-    }
-
-    public void onActivityResult( int request_code, int result_code, Intent data ){
-
-        super.onActivityResult(request_code, result_code, data);
-
-        if( request_code == TEXT_REQUEST ){
-            if( result_code == RESULT_OK ){
-
-                String created_task = data.getStringExtra(CreateTaskActivity.EXTRA_CREATED_TASK);
-                if( !created_task.equals("") ){
-
-                    // add new task code
-                    tasks.add(created_task);
-
-                    task_views.add( new TextView(this) );
-                    task_views.lastElement().setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
-                    task_views.lastElement().setText(created_task);
-                    task_views.lastElement().setTextSize(48);
-                    task_views.lastElement().setOnClickListener(remove_task_listener);
-
-                    task_layout.addView(task_views.lastElement());
-                }
-            }
+        String task_text = new_task_text.getText().toString();
+        // only add non-empty tasks
+        if (!task_text.equals("")) {
+            tasks_adapter.add(task_text);
+            new_task_text.setText("");
+            writeTasksToFile();
         }
 
     }
 
 
-    public void onStop(){
-        super.onStop();
+    private void readTasksFromFile() {
 
-        // save remaining tasks to memory
-        Log.d("MainListActivity", "Trying to write to file");
-        try{
-            File file = new File(this.getFilesDir(), filename);
-            out = new BufferedWriter( new FileWriter(file) );
-            for( int i = 0; i < tasks.size(); ++i ){
-                out.write(tasks.get(i));
-                out.newLine();
-            }
-            Log.d("MainListActivity", "Number of Tasks written to file: " + tasks.size());
+        File filesdir = getFilesDir();
+        File tasks_file = new File(filesdir, filename);
+
+        try {
+            tasks = new ArrayList<>(FileUtils.readLines(tasks_file, "UTF-8"));
+        } catch (Exception e) {
+            // no file found
+            e.printStackTrace();
+            tasks = new ArrayList<>();
         }
-        catch(Exception e){
-            Log.e("MainListActivity", "WRITING TO FILE FAILED");
+
+    }
+
+    private void writeTasksToFile() {
+
+        File filesdir = getFilesDir();
+        File tasks_file = new File(filesdir, filename);
+
+        try {
+            FileUtils.writeLines(tasks_file, tasks);
+        } catch (Exception e) {
+
             e.printStackTrace();
         }
-        finally{
-            try{
-                out.close();
-            }
-            catch(Exception e){
-                e.printStackTrace();
-            }
-        }
 
     }
+
+
 }
