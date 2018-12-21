@@ -212,3 +212,21 @@ Interative Progress:
 
 2. Upload to Google Play Store
 
+	Have to create keystore to sign package
+	Use Android Studio to build a release app bundle
+	Fill out a bunch of information about the app on the Google Play Dashboard
+
+
+====================================================================================12/21/18
+
+Implement MVP on the single activity app:
+	
+	1. Activity = view
+		Has direct functions for making UI changes
+		Holds Adapters for data
+		Has Instance of Presenter
+			Presenter has instance of Model
+			Presenter has reference to View
+
+
+		Create Presenter class
