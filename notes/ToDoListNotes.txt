@@ -229,4 +229,30 @@ Implement MVP on the single activity app:
 			Presenter has reference to View
 
 
-		Create Presenter class
+		Presenter Interface:
+			Start
+			SetModel
+			LoadTasks
+			AddTask
+			RemoveTask
+
+
+
+		View Interface:
+			SetPresenter
+			ShowTasks
+
+
+		Model Interface:
+			GetTasks
+			AddTask
+			RemoveTask
+
+
+===================================================================================01/02/19
+
+Why does the ArrayAdapter not update items from the underlying ArrayList?
+	
+	How does assigment of a new array affect the Adapter?
+
+	
