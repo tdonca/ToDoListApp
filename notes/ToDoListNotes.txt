@@ -213,6 +213,12 @@ Interative Progress:
 2. Upload to Google Play Store
 
 	Have to create keystore to sign package
+		The keystore is located in: 
+			/home/tudor/.android/appstorekeystore.jks
+		Requires a password for the keystore, then a password for the specific app key
+		The app key alias is:
+			key0-mytasks
+
 	Use Android Studio to build a release app bundle
 	Fill out a bunch of information about the app on the Google Play Dashboard
 
@@ -254,5 +260,27 @@ Implement MVP on the single activity app:
 Why does the ArrayAdapter not update items from the underlying ArrayList?
 	
 	How does assigment of a new array affect the Adapter?
+		ArrayAdapter holds the reference to the data source (array)
+		If you assign a new array to the data variable:
+			m_tasks = new ArrayList<>(otherarray);
+		
+		Then m_tasks does not reference the data used by the Adapter anymore
+		Instead, clear the data in the current variable and add all of the elements from the other array:
+			m_tasks.clear();
+			m_tasks.addAll(otherarray);
 
+
+========================================================================01/03/19
+
+MVP with Multiple Activites:
 	
+	One View = One Activity
+
+	TaskListView
+	AddTaskView
+	TaskDetailsView
+
+
+
+
+

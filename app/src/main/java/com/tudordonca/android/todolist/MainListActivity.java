@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class MainListActivity extends AppCompatActivity implements MainListContract.TaskListView {
 
+    
     private MainListContract.TaskListPresenter m_tasks_presenter;
     private MainListContract.TaskListModel m_tasks_model;
     private String m_filename = "MyTasks.txt";
