@@ -1,5 +1,6 @@
 package com.tudordonca.android.todolist;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,8 @@ import java.util.ArrayList;
 
 public class MainListActivity extends AppCompatActivity implements MainListContract.TaskListView {
 
-    
+    static final int NEW_TASK_REQUEST = 1;
+
     private MainListContract.TaskListPresenter m_tasks_presenter;
     private MainListContract.TaskListModel m_tasks_model;
     private String m_filename = "MyTasks.txt";
@@ -81,14 +83,26 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     }
 
 
+    public void showCreateTaskUI(){
+
+        // create intent and launch CreateTaskActivity with result
+        Log.i("View", "create Intent and launch CreateTaskActivity");
+        Intent create_task_intent = new Intent( this, AddTaskActivity.class );
+        startActivityForResult(create_task_intent, NEW_TASK_REQUEST);
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+
+        // get task name and call presenter to addtask()
+
+    }
 
     public void createTask(View view) {
 
-        String task_text = m_new_task_text.getText().toString();
-        // only add non-empty tasks
-        if (!task_text.equals("")) {
-            m_tasks_presenter.addTask(task_text);
-            m_new_task_text.setText("");
-        }
+        // call presenter createTask function
+        Log.i("View", "call presenter createTask()");
+        m_tasks_presenter.createTask();
+
     }
 }

@@ -272,7 +272,7 @@ Why does the ArrayAdapter not update items from the underlying ArrayList?
 
 ========================================================================01/03/19
 
-MVP with Multiple Activites:
+MVP with Multiple Activities:
 	
 	One View = One Activity
 
@@ -280,7 +280,53 @@ MVP with Multiple Activites:
 	AddTaskView
 	TaskDetailsView
 
+	tasklist activity => add task activity
 
 
+	Adding a new activity to the project:
+		just go to File > New > Activity and fill out the info
+		add activity to the Manifest
+		set as child of main activity:
+				<activity
+		            android:name=".AddTaskActivity"
+		            android:label="Create Task"
+		            android:parentActivityName=".MainListActivity">
+		            <meta-data
+		                android:name="android.support.PARENT_ACTIVITY"
+		                android:value="com.tudordonca.android.todolist.MainListActivity" />	
+		        </activity>
+
+
+
+
+	MainListActivity:
+		onbuttonclick: 
+			start createtask activity with result checking
+			get back a bundle with just task name string for now
+			add the task
+
+	CreateTaskActivity:
+		onbuttonclick:
+			take input text and put it in the intent bundle to return
+			finish activity
+
+
+	Sequence:
+		View, onbuttonclick -> Presenter, buttonFunction -> View, showNewActivityUI -> View, onActivityResult -> Presenter, addTask -> View, displayTasks
+
+
+	Creating an Intent and launching a new activity:
+		static final int NEW_TASK_REQUEST = 1;
+		...
+		Intent new_task_intent = new Intent(this, CreateTaskActivity.class);
+        startActivityForResult(new_task_intent, TEXT_REQUEST);
+
+        ...
+        onActivityResult(){...}
+
+
+
+    Putting Data in a Bundle for an Intent result:
+    	
 
 

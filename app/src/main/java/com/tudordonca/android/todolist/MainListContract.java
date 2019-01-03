@@ -5,6 +5,8 @@ package com.tudordonca.android.todolist;
     *
     * */
 
+import android.content.Intent;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -15,7 +17,7 @@ public interface MainListContract {
 
         void showTasks( ArrayList<String> tasks );
 
-        // Future intent activity transitions
+        void showCreateTaskUI();
 
     }
 
@@ -25,9 +27,13 @@ public interface MainListContract {
 
         void start();
 
+        void createTask();
+
         void addTask( String task );
 
         void removeTask( int position );
+
+        void onResult(int requestCode, int resultCode);
 
     }
 

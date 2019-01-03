@@ -22,6 +22,13 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
         m_tasks_view.showTasks( m_tasks_model.getTasks());
     }
 
+    public void createTask(){
+
+        // call view's showCreateTask function
+        Log.i("Presenter", "modify UI for CreateTask");
+        m_tasks_view.showCreateTaskUI();
+    }
+
 
     public void addTask( String task ){
 
@@ -35,5 +42,10 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
         m_tasks_model.removeTask( position );
         m_tasks_model.saveTasks();
         m_tasks_view.showTasks( m_tasks_model.getTasks() );
+    }
+
+    public void onResult( int requestCode, int resultCode ){
+
+
     }
 }
