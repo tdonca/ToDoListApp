@@ -6,4 +6,5 @@
     <string name="edit_task_text">Enter a new task</string>
     <string name="main_action_bar">My Tasks</string>
     <string name="create_a_new_task">Create a new task</string>
+    <string name="create_button_text">Create</string>
 </resources>

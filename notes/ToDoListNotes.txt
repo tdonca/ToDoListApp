@@ -325,8 +325,14 @@ MVP with Multiple Activities:
         onActivityResult(){...}
 
 
-
-    Putting Data in a Bundle for an Intent result:
     	
+=====================================================================01/07/19
+
+	
+	Putting Data in a Bundle for an Intent result:
+		The Intent has an internal Bundle:
+			Bundle extras = intent.getExtras();
 
 
+	In the receiving activity, get text and return in an intent bundle:
+		create new intent object (NEVER REUSE!)

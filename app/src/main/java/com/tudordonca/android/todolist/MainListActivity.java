@@ -26,7 +26,6 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     private ArrayList<String> m_tasks;
     private ArrayAdapter<String> m_tasks_adapter;
     private ListView m_task_list_view;
-    private EditText m_new_task_text;
 
 
 
@@ -36,7 +35,6 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
         m_task_list_view = findViewById(R.id.task_list);
-        m_new_task_text = findViewById(R.id.new_task_edit);
 
         // create model
         m_tasks_model = new MainListModel( getFilesDir().toString(), m_filename );
@@ -95,6 +93,15 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
 
         // get task name and call presenter to addtask()
+        if( requestCode == NEW_TASK_REQUEST ){
+            if( resultCode == RESULT_OK ){
+
+                String new_task = data.getExtras().getString( AddTaskActivity.EXTRA_NEW_TASK );
+                if(!new_task.equals("")){
+                    m_tasks_presenter.addTask(new_task);
+                }
+            }
+        }
 
     }
 
