@@ -20,12 +20,10 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
     static final int NEW_TASK_REQUEST = 1;
 
-    private MainListContract.TaskListPresenter m_tasks_presenter;
-    private MainListContract.TaskListModel m_tasks_model;
-    private String m_filename = "MyTasks.txt";
-    private ArrayList<String> m_tasks;
-    private ArrayAdapter<String> m_tasks_adapter;
-    private ListView m_task_list_view;
+    private MainListContract.TaskListPresenter tasksPresenter;
+    private ArrayList<String> tasksList;
+    private ArrayAdapter<String> tasksAdapter;
+    private ListView taskListView;
 
 
 
@@ -34,37 +32,33 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
-        m_task_list_view = findViewById(R.id.task_list);
-
-        // create model
-        m_tasks_model = new MainListModel( getFilesDir().toString(), m_filename );
+        taskListView = findViewById(R.id.task_list);
 
         // create presenter
-        m_tasks_presenter = new MainListPresenter(this, m_tasks_model);
+        tasksPresenter = new MainListPresenter(this, getFilesDir().toString() );
 
         // create adapter for task list
-        m_tasks = new ArrayList<>();
-        m_tasks_adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, m_tasks);
+        tasksList = new ArrayList<>();
+        tasksAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasksList);
 
         // assign adapter to a UI viewgroup
-        m_task_list_view.setAdapter(m_tasks_adapter);
+        taskListView.setAdapter(tasksAdapter);
 
         // setup click listener for listView
         setupListViewListener();
 
         // display any saved tasks
-        m_tasks_presenter.start();
+        tasksPresenter.start();
 
         // display help toast
         Toast.makeText(this, "Tap and hold to remove tasks", Toast.LENGTH_SHORT).show();
     }
 
     private void setupListViewListener() {
-        m_task_list_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        taskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                m_tasks_presenter.removeTask(position);
+                tasksPresenter.removeTask(position);
                 return true;
             }
         });
@@ -75,9 +69,10 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     public void showTasks( ArrayList<String> tasks ){
 
         Log.i("View", "show updated tasks");
-        m_tasks.clear();
-        m_tasks.addAll(tasks);
-        m_tasks_adapter.notifyDataSetChanged();
+        tasksList.clear();
+        tasksList.addAll(tasks);
+        tasksAdapter.notifyDataSetChanged();
+        Log.i("View", "Num tasks: " + tasksList.size());
     }
 
 
@@ -98,7 +93,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
                 String new_task = data.getExtras().getString( AddTaskActivity.EXTRA_NEW_TASK );
                 if(!new_task.equals("")){
-                    m_tasks_presenter.addTask(new_task);
+                    tasksPresenter.addTask(new_task);
                 }
             }
         }
@@ -109,7 +104,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
         // call presenter createTask function
         Log.i("View", "call presenter createTask()");
-        m_tasks_presenter.createTask();
+        tasksPresenter.createTask();
 
     }
 }

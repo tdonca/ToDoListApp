@@ -336,3 +336,37 @@ MVP with Multiple Activities:
 
 	In the receiving activity, get text and return in an intent bundle:
 		create new intent object (NEVER REUSE!)
+		add the string to the Intent extras
+		set the Intent result to OK
+		finish() the activity
+
+----------------------------------------------
+
+
+Background Async Processing and Network Connections:
+	
+	AsyncTask vs Loader:
+			
+
+ ^ pause this for now while I correct previous project using Steve's suggestions
+
+=====================================================================01/08/19
+
+
+Corrections:
+	style: variable names use camel case:
+			m_tasks_collection -> tasksCollection
+
+	MVP: no model in this case, since the task items themselves are the model
+		 use custom task views and RecyclerView in the UI View
+
+
+	1. Remove Model Class
+	2. Presenter has Tasks ArrayList (the model)
+	3. Presenter creates files and reads/writes tasks
+	4. Custom Item view
+	5. RecyclerView
+
+
+1. Remove model class
+	
