@@ -33,23 +33,6 @@ public interface MainListContract {
 
         void removeTask( int position );
 
-        void onResult(int requestCode, int resultCode);
-
-    }
-
-
-
-    interface TaskListModel {
-
-        void loadTasks();
-
-        void saveTasks();
-
-        void addTask( String task );
-
-        void removeTask( int position );
-
-        ArrayList<String> getTasks();
 
     }
 

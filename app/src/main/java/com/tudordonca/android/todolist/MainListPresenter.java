@@ -2,50 +2,78 @@ package com.tudordonca.android.todolist;
 
 import android.util.Log;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.util.ArrayList;
+
 public class MainListPresenter implements MainListContract.TaskListPresenter {
 
-    private MainListContract.TaskListView m_tasks_view;
-    private MainListContract.TaskListModel m_tasks_model;
+    private MainListContract.TaskListView tasksView;
+    private ArrayList<String> tasks;
+    private File tasksStorageFile;
 
 
-    public MainListPresenter( MainListContract.TaskListView tasks_view, MainListContract.TaskListModel tasks_model ){
+    public MainListPresenter( MainListContract.TaskListView tasksListView, String fileFolder ){
 
-        m_tasks_view = tasks_view;
-        m_tasks_model = tasks_model;
-
-        m_tasks_model.loadTasks();
+        tasksView = tasksListView;
+        tasks = new ArrayList<>();
+        tasksStorageFile = new File(fileFolder, "MyTasks.txt");
     }
 
 
     public void start(){
 
-        m_tasks_view.showTasks( m_tasks_model.getTasks());
+        readTasks(tasksStorageFile);
+        tasksView.showTasks(tasks);
     }
 
     public void createTask(){
 
         // call view's showCreateTask function
         Log.i("Presenter", "modify UI for CreateTask");
-        m_tasks_view.showCreateTaskUI();
+        tasksView.showCreateTaskUI();
     }
 
 
     public void addTask( String task ){
 
-        m_tasks_model.addTask(task);
-        m_tasks_model.saveTasks();
-        m_tasks_view.showTasks( m_tasks_model.getTasks() );
+        tasks.add(task);
+        writeTasks(tasksStorageFile);
+        Log.i("Presenter", "Num tasks: " + tasks.size());
+        tasksView.showTasks(tasks);
     }
 
     public void removeTask( int position ){
 
-        m_tasks_model.removeTask( position );
-        m_tasks_model.saveTasks();
-        m_tasks_view.showTasks( m_tasks_model.getTasks() );
+        tasks.remove(position);
+        writeTasks(tasksStorageFile);
+        Log.i("Presenter", "Num tasks: " + tasks.size());
+        tasksView.showTasks(tasks);
     }
 
-    public void onResult( int requestCode, int resultCode ){
 
+    private void readTasks( File tasksFile ){
 
+        try{
+            tasks.addAll( FileUtils.readLines( tasksFile, "UTF-8" ) );
+        }
+        catch( Exception e ){
+            e.printStackTrace();
+            Log.e("Presenter", "Loading Tasks Failed!");
+        }
     }
+
+    private void writeTasks( File tasksFile ){
+
+        try{
+            FileUtils.writeLines( tasksFile, tasks );
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            Log.e("Presenter", "Saving Tasks Failed!");
+        }
+    }
+
+
 }
