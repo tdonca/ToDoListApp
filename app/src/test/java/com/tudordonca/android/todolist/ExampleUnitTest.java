@@ -1,4 +1,4 @@
-package com.example.tudor.todolist;
+package com.tudordonca.android.todolist;
 
 import org.junit.Test;
 

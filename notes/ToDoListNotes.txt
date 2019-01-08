@@ -1,4 +1,4 @@
-====================================================12/10/2018
+============================================================12/10/2018
 
 To Do List App.
 
@@ -74,13 +74,265 @@ Store Tasks in a file on internal storage:
 	maintain a file that holds the active tasks
 
 	on app create:
-		try openFileInput()
-			read strings and add to task list 
-		catch FileNotFoundException
+		use BufferedReader on the file
 
 
 	on app close:
-		delete the existing file
-		openFileOutput()
-		write current task strings
-		close file
+		delete any existing file
+		use BufferedWriter on the file
+
+===============================================================================12/12/18
+
+
+Find a way to uniquely access each task when it is tapped
+
+Be able to remove a task from the data structure correctly when the TextView is tapped
+
+================================================================================12/17/18
+
+
+Learning about App Architecture Design:
+
+O.O. Principles, Separation of Responsibility:
+	Separate UI and Functionality
+
+	Activity -> Context: Access to Platform Features and Resources
+
+	Can't separate Functionality from Activity, so separate UI
+
+
+
+Model-View-Presenter:
+	
+	Model - Data and internal processing / functionality
+
+	View - Passive UI Display and Interaction Catching (Activity)
+
+	Presenter - Communication between View and Model, handling view updates and user input processing
+
+
+
+
+Splitting UI and Functionality using MVP:
+	
+	View displays tasks in order
+	Presenter gets task names and order from Model
+	Model gets strings from file and creates Task objects
+
+
+
+
+View:
+	MainActivity, NewTaskActivity
+	OnCreate, loadUI objects
+	onClick() stuff - call Presenter functions to handle
+
+Presenter:
+	call View functions to display tasks
+	call View function to load new Activity
+	receive deletedTask or newTasks calls
+	add/remove tasks from Model
+
+Model:
+	load tasks from file
+	receive new tasks from presenter
+	save tasks to file on exit
+
+
+
+====================================================================12/19/18
+
+
+Using MVP todoapp example to implement MVP: https://github.com/googlesamples/android-architecture/tree/todo-mvp
+
+Stick with One Activity Per UI View, and use Intents to pass model data - Parcelable/Serializeable
+
+====================================================================12/20/18
+
+
+Interative Progress:
+	1. Get base functionality working (list view, adapter, adding/removing tasks, saving to file)
+	2. Difference between Back button and finish() intent return for activity lifecycles
+	3. Implement MVP w/ Intents between activities (w/ Serializeable)
+
+
+1. Base Functionality: https://guides.codepath.com/android/Basic-Todo-App-Tutorial
+	
+	Adapter for lists
+		ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, values)
+
+		1. Create the adapter that handles a set of data (ArrayList in this case)
+		2. Assign the adapter to an existing viewgroup that will hold the UI elements
+		3. Add data elements to the data (automatically added to views through adapter)
+
+	Allow onClick events:
+		create a onClick listener for the ListView directly, not the individual elements.
+		This way the ListView can keep track of which element is clicked, allowing easy element modification without lookup
+
+	Add elements:
+		add using Adapter.add() to automatically display the new UI element
+
+	Delete elements:
+		remove using array index obtained from the ListView Elements
+		remove from data source directly ArrayList.remove()
+		** this means we have to update the adapter to remove the UI element
+		Adapter.notifyDataSetChanged()
+		since the adapter has a reference to an underlying array, it does not keep track of its modifications in real time, so we 
+		have to tell it that the array changed
+
+
+	Save tasks to file:
+		Commons.io library
+		import library through Gradle in app's build.gradle file:
+
+			repositories {
+    			...
+    			mavenCentral()
+			}
+			... 
+			dependencies {
+				...
+				implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+			}
+				
+
+		Read from file:
+			get the app files directory using getFilesDir()
+			create a File object for the file
+			get an ArrayList of strings from the lines of the text file:
+				arraylist = FileUtils.readLines(filename, "UTF-8");
+
+
+		Write to file:
+			use the elements of an ArrayList as lines to write to the text file:
+				FileUtils.writeLines(filename, arraylist);
+
+		***Always use try/catch exception handling when dealing with I/O***
+
+
+2. Upload to Google Play Store
+
+	Have to create keystore to sign package
+		The keystore is located in: 
+			/home/tudor/.android/appstorekeystore.jks
+		Requires a password for the keystore, then a password for the specific app key
+		The app key alias is:
+			key0-mytasks
+
+	Use Android Studio to build a release app bundle
+	Fill out a bunch of information about the app on the Google Play Dashboard
+
+
+====================================================================================12/21/18
+
+Implement MVP on the single activity app:
+	
+	1. Activity = view
+		Has direct functions for making UI changes
+		Holds Adapters for data
+		Has Instance of Presenter
+			Presenter has instance of Model
+			Presenter has reference to View
+
+
+		Presenter Interface:
+			Start
+			SetModel
+			LoadTasks
+			AddTask
+			RemoveTask
+
+
+
+		View Interface:
+			SetPresenter
+			ShowTasks
+
+
+		Model Interface:
+			GetTasks
+			AddTask
+			RemoveTask
+
+
+===================================================================================01/02/19
+
+Why does the ArrayAdapter not update items from the underlying ArrayList?
+	
+	How does assigment of a new array affect the Adapter?
+		ArrayAdapter holds the reference to the data source (array)
+		If you assign a new array to the data variable:
+			m_tasks = new ArrayList<>(otherarray);
+		
+		Then m_tasks does not reference the data used by the Adapter anymore
+		Instead, clear the data in the current variable and add all of the elements from the other array:
+			m_tasks.clear();
+			m_tasks.addAll(otherarray);
+
+
+========================================================================01/03/19
+
+MVP with Multiple Activities:
+	
+	One View = One Activity
+
+	TaskListView
+	AddTaskView
+	TaskDetailsView
+
+	tasklist activity => add task activity
+
+
+	Adding a new activity to the project:
+		just go to File > New > Activity and fill out the info
+		add activity to the Manifest
+		set as child of main activity:
+				<activity
+		            android:name=".AddTaskActivity"
+		            android:label="Create Task"
+		            android:parentActivityName=".MainListActivity">
+		            <meta-data
+		                android:name="android.support.PARENT_ACTIVITY"
+		                android:value="com.tudordonca.android.todolist.MainListActivity" />	
+		        </activity>
+
+
+
+
+	MainListActivity:
+		onbuttonclick: 
+			start createtask activity with result checking
+			get back a bundle with just task name string for now
+			add the task
+
+	CreateTaskActivity:
+		onbuttonclick:
+			take input text and put it in the intent bundle to return
+			finish activity
+
+
+	Sequence:
+		View, onbuttonclick -> Presenter, buttonFunction -> View, showNewActivityUI -> View, onActivityResult -> Presenter, addTask -> View, displayTasks
+
+
+	Creating an Intent and launching a new activity:
+		static final int NEW_TASK_REQUEST = 1;
+		...
+		Intent new_task_intent = new Intent(this, CreateTaskActivity.class);
+        startActivityForResult(new_task_intent, TEXT_REQUEST);
+
+        ...
+        onActivityResult(){...}
+
+
+    	
+=====================================================================01/07/19
+
+	
+	Putting Data in a Bundle for an Intent result:
+		The Intent has an internal Bundle:
+			Bundle extras = intent.getExtras();
+
+
+	In the receiving activity, get text and return in an intent bundle:
+		create new intent object (NEVER REUSE!)

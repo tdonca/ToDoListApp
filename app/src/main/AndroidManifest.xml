@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tudor.todolist">
+    package="com.tudordonca.android.todolist">
 
     <application
         android:allowBackup="true"
@@ -9,22 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainListActivity">
+        <activity
+            android:name=".MainListActivity"
+            android:label="@string/main_action_bar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".CreateTaskActivity"
-            android:label="New Task"
+        <activity
+            android:name=".AddTaskActivity"
+            android:label="Create Task"
             android:parentActivityName=".MainListActivity">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.tudor.todolist.MainListActivity" />
-
+                android:value="com.tudordonca.android.todolist.MainListActivity" />
         </activity>
     </application>
 
