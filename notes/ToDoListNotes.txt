@@ -368,5 +368,74 @@ Corrections:
 	5. RecyclerView
 
 
-1. Remove model class
+1,2,3. Remove model class and move stuff to presenter
+	Data is the Model
+	The Task variables are the Model(s)!
+	Do file read/write in Presenter class (that's still just acessing the Model in the file)
+
+4. Custom item view
 	
+	RecyclerView
+	Layout Manager
+	Custom Item Layout
+	Adapter
+	ViewHolder
+
+
+	
+------------------------------------------
+
+Practice Creating a Test Recycler View in a new App:
+	https://guides.codepath.com/android/using-the-recyclerview#creating-the-recyclerview-adapter
+	https://developer.android.com/guide/topics/ui/layout/recyclerview
+
+
+	add dependency in module build file:
+		implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+	in Activity Java file:
+		RecyclerView
+	    RecyclerView.Adapter
+	    RecyclerView.LayoutManager
+	connect the layoutmanager and attach an adapter
+
+	create an adapter for the custom item layout we created:
+		class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder>
+
+	create a ViewHolder class inside the adapter:
+		class TaskViewHolder extends RecyclerView.ViewHolder
+	
+	ViewHolder holds the view for each item in the RecyclerLayout
+
+
+	TaskAdapter:
+		Constructor
+		ViewHolder class -> holds a set of data and metadata about it's location
+		onCreateViewHolder() -> create new view
+		onBindViewHolder() -> set new contents on an existing view
+		getItemCount()
+
+	ViewHolder:
+		holds the overall "item view"
+		has variables for all sub-view refrences within the item
+		constructor uses findViewById() for these references
+
+	onCreateViewHolder():
+		has a LayoutInflater
+			creates a view from a layout xml file
+		always use an existing inflater from the context, DO NOT CREATE A NEW ONE
+		use the inflater to inflate the item layout
+			inflater.infalte(R.layout.task_item, parentView, false)
+		returns a reference to a created ViewHolder with the inflated view
+
+	onBindViewHolder():
+		given a position in the dataset and a viewholder, update the viewholder with the new data
+
+
+
+
+	Adding click functionality to items:
+		Must attach an onclicklistener to the ViewHolder
+		Deleting the item from within the viewholder might be problematic, so instead do the deletion code outside ofthe viewholder
+			https://stackoverflow.com/questions/26076965/android-recyclerview-addition-removal-of-items
+			
