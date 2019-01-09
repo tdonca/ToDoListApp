@@ -3,17 +3,12 @@ package com.tudordonca.android.todolist;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
-
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
 import java.util.ArrayList;
 
 public class MainListActivity extends AppCompatActivity implements MainListContract.TaskListView {
@@ -22,8 +17,10 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
     private MainListContract.TaskListPresenter tasksPresenter;
     private ArrayList<String> tasksList;
-    private ArrayAdapter<String> tasksAdapter;
-    private ListView taskListView;
+
+    private RecyclerView taskRecyclerView;
+    private RecyclerView.Adapter taskAdapter;
+    private RecyclerView.LayoutManager taskLayoutManager;
 
 
 
@@ -32,20 +29,23 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
-        taskListView = findViewById(R.id.task_list);
+
+        // Setup Recycler View
+        taskRecyclerView = findViewById(R.id.task_list_recycler_view);
+        taskRecyclerView.setHasFixedSize(true);
+        taskLayoutManager = new LinearLayoutManager(this);
+        taskRecyclerView.setLayoutManager(taskLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(taskRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        taskRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // create presenter
         tasksPresenter = new MainListPresenter(this, getFilesDir().toString() );
 
         // create adapter for task list
         tasksList = new ArrayList<>();
-        tasksAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tasksList);
+        taskAdapter = new TaskAdapter(tasksList, tasksPresenter);
+        taskRecyclerView.setAdapter(taskAdapter);
 
-        // assign adapter to a UI viewgroup
-        taskListView.setAdapter(tasksAdapter);
-
-        // setup click listener for listView
-        setupListViewListener();
 
         // display any saved tasks
         tasksPresenter.start();
@@ -54,24 +54,13 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         Toast.makeText(this, "Tap and hold to remove tasks", Toast.LENGTH_SHORT).show();
     }
 
-    private void setupListViewListener() {
-        taskListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                tasksPresenter.removeTask(position);
-                return true;
-            }
-        });
-
-    }
-
 
     public void showTasks( ArrayList<String> tasks ){
 
         Log.i("View", "show updated tasks");
         tasksList.clear();
         tasksList.addAll(tasks);
-        tasksAdapter.notifyDataSetChanged();
+        taskAdapter.notifyDataSetChanged();
         Log.i("View", "Num tasks: " + tasksList.size());
     }
 
