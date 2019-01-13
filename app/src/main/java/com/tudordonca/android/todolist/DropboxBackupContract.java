@@ -2,17 +2,18 @@ package com.tudordonca.android.todolist;
 
 public interface DropboxBackupContract {
 
-    interface DropboxBackupView {
+    interface View {
 
-        void showLogin();
+
 
     }
 
 
-    interface DropboxBackupPresenter {
+    interface Presenter {
 
         void start();
 
+        void initAndLoadData(String accessToken);
 
     }
 

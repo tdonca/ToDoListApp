@@ -601,14 +601,28 @@ ToDoList Redesign:
 	1. TaskList Activity 
 		Keep simple view with main activity add task button at the bottom
 		App Action Bar - overflow menu
-			list option for Dropbox backup
-			remove default "No-Toolbar" theme from the Manifest:
-				android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-			add a Toolbar widget to the layout file:
-				android.support.v7.widget.Toolbar
+		Add list option for dropbox activity
+			Use this in Activity to load a menu.xml file with the option added:
+				public boolean onCreateOptionsMenu(Menu menu) {
+			        // Inflate the menu; this adds items to the action bar if it is present.
+			        getMenuInflater().inflate(R.menu.menu_main, menu);
+			        return true;
+			    }
+		The onClick function requires a MenuItem, not a View:
+			public void dropboxBackup(MenuItem mi){...}
+
 
 	2. DropboxBackup Activity
-	
+		add dropbox libraries as an app dependency:
+			implementation 'com.dropbox.core:dropbox-core-sdk:3.0.10'
+		register the app on the dropbox website
+		save app key to strings.xml
+
+
+		copied over stuff from the OAuth2 App
+		create AsyncTask to get account info and saved tasks:
+
+=========================================================================01/13/19
 
 
 	3. EditTask Activity
