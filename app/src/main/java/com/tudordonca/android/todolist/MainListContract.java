@@ -19,6 +19,10 @@ public interface MainListContract {
 
         void showCreateTaskUI();
 
+        void showDropboxBackupUI();
+
+        void showEditTaskUI();
+
     }
 
 
@@ -29,9 +33,13 @@ public interface MainListContract {
 
         void createTask();
 
+        void dropboxBackup();
+
         void addTask( String task );
 
         void removeTask( int position );
+
+
 
 
     }

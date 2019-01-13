@@ -36,7 +36,11 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
     }
 
 
-    public void addTask( String task ){
+    public void dropboxBackup() {
+        Log.i("Presenter", "modify UI for DropboxBackupTask");
+    }
+
+    public void addTask(String task ){
 
         tasks.add(task);
         writeTasks(tasksStorageFile);
