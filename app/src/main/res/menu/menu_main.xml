@@ -5,6 +5,6 @@
         android:id="@+id/miCompose"
         app:showAsAction="never"
         android:title="@string/menu_item_dropbox_backup"
-        android:onClick="">
+        android:onClick="dropboxBackup">
     </item>
 </menu>

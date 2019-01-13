@@ -26,6 +26,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tudordonca.android.todolist.MainListActivity" />
         </activity>
+        <activity android:name=".DropboxBackupActivity"
+            android:label="Connect to Dropbox">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tudordonca.android.todolist.MainListActivity" />
+        </activity>
     </application>
 
 </manifest>

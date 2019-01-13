@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 public class MainListActivity extends AppCompatActivity implements MainListContract.TaskListView {
 
     static final int NEW_TASK_REQUEST = 1;
+    static final int DROPBOX_BACKUP_REQUEST = 2;
 
     private MainListContract.TaskListPresenter tasksPresenter;
     private ArrayList<String> tasksList;
@@ -89,7 +91,9 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     }
 
     public void showDropboxBackupUI(){
-
+        Log.i("View", "create Intent and launch DropboxBackupActivity");
+        Intent dropboxBackupIntent = new Intent( this, DropboxBackupActivity.class );
+        startActivityForResult(dropboxBackupIntent, DROPBOX_BACKUP_REQUEST);
     }
 
     public void showEditTaskUI(){
@@ -114,7 +118,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         }
     }
 
-    public void dropboxBackup(View view){
+    public void dropboxBackup(MenuItem mi){
         tasksPresenter.dropboxBackup();
 
     }
@@ -130,6 +134,12 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
                 if(!new_task.equals("")){
                     tasksPresenter.addTask(new_task);
                 }
+            }
+        }
+        else if( requestCode == DROPBOX_BACKUP_REQUEST ){
+            if( resultCode == RESULT_OK ){
+
+                // Load tasks obtained from Dropbox
             }
         }
 
