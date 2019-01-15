@@ -623,6 +623,20 @@ ToDoList Redesign:
 		create AsyncTask to get account info and saved tasks:
 
 =========================================================================01/13/19
+	
+		hold async task in Presenter
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	3. EditTask Activity

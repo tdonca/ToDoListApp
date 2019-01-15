@@ -8,6 +8,7 @@ import com.tudordonca.android.todolist.DropboxBackupContract.Presenter;
 public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
 
     private DropboxBackupContract.View UIView;
+    private DropboxAccountTask dropboxAccountTask;
 
     DropboxBackupPresenter(DropboxBackupContract.View view){
         UIView = view;
