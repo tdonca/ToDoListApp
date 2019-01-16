@@ -28,8 +28,14 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
     }
 
     @Override
-    public void start() {
-        // might not need this anymore
+    public void resume(String accessToken) {
+        // check access token
+
+        // get a new one if necessary
+
+        // get account data
+
+        // tell view to display
     }
 
     public void initAndLoadData(String accessToken){
@@ -85,7 +91,7 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
 
 
     public void syncData(){
-        UIView.deliverSyncedTasks(tasks);
+        UIView.deliverIntentResult(true, tasks);
     }
 
 

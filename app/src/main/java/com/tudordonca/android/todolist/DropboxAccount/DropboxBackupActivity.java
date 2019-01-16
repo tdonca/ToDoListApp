@@ -16,8 +16,9 @@ import java.util.ArrayList;
 
 public class DropboxBackupActivity extends AppCompatActivity implements DropboxBackupContract.View {
 
-    public static final String EXTRA_SYNCED_TASKS = "com.tudordonca.android.todolist.SYNCED_TASKS";
-
+    public static final String EXTRA_SYNCED_TASKS_FILE = "com.tudordonca.android.todolist.SYNCED_TASKS";
+    public static final String EXTRA_REPLACE_TASKS = "com.tudordonca.android.todolist.REPLACE_TASKS";
+    private SharedPreferences preferences;
 
     private DropboxBackupContract.Presenter presenter;
     @Override
@@ -25,6 +26,14 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dropbox_backup);
 
+
+        // Setup presenter
+        presenter = new DropboxBackupPresenter(this, getFilesDir().toString(), getString(R.string.dropbox_local_file));
+
+        // Setup preferences
+        preferences = getSharedPreferences("com.tudordonca.android.todolist", MODE_PRIVATE);
+
+        //Setup UI
         // Setup Dropbox login button
         Button loginButton = (Button) findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -34,44 +43,44 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
             }
         });
 
-        // Setup presenter
-        presenter = new DropboxBackupPresenter(this, getFilesDir().toString(), getString(R.string.dropbox_local_file));
+
 
 
     }
 
     protected void onResume(){
         super.onResume();
-        //TODO: change name
-        SharedPreferences prefs = getSharedPreferences("dropbox-sample", MODE_PRIVATE);
-        String accessToken = prefs.getString("access-token", null);
-        if (accessToken == null) {
-            accessToken = Auth.getOAuth2Token();
-            if (accessToken != null) {
-                prefs.edit().putString("access-token", accessToken).apply();
-                presenter.initAndLoadData(accessToken);
-            }
-        } else {
-            presenter.initAndLoadData(accessToken);
-        }
 
-        if (hasToken()) {
-            findViewById(R.id.login_button).setVisibility(View.GONE);
-            findViewById(R.id.email_text).setVisibility(View.VISIBLE);
-            findViewById(R.id.name_text).setVisibility(View.VISIBLE);
-            findViewById(R.id.type_text).setVisibility(View.VISIBLE);
-            findViewById(R.id.saved_tasks_text).setVisibility(View.VISIBLE);
-            findViewById(R.id.sync_button).setEnabled(true);
-            Log.d("DropboxBackupActivity","On Resume Has Token");
-        } else {
-            findViewById(R.id.login_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.email_text).setVisibility(View.GONE);
-            findViewById(R.id.name_text).setVisibility(View.GONE);
-            findViewById(R.id.type_text).setVisibility(View.GONE);
-            findViewById(R.id.saved_tasks_text).setVisibility(View.GONE);
-            findViewById(R.id.sync_button).setEnabled(false);
-            Log.d("DropboxBackupActivity","On Resume Does Not Have Token");
-        }
+        String accessToken = preferences.getString("access-token", null);
+        presenter.resume(accessToken);
+
+//        if (accessToken == null) {
+//            accessToken = Auth.getOAuth2Token();
+//            if (accessToken != null) {
+//                preferences.edit().putString("access-token", accessToken).apply();
+//                presenter.initAndLoadData(accessToken);
+//            }
+//        } else {
+//            presenter.initAndLoadData(accessToken);
+//        }
+//
+//        if (hasToken()) {
+//            findViewById(R.id.login_button).setVisibility(View.GONE);
+//            findViewById(R.id.email_text).setVisibility(View.VISIBLE);
+//            findViewById(R.id.name_text).setVisibility(View.VISIBLE);
+//            findViewById(R.id.type_text).setVisibility(View.VISIBLE);
+//            findViewById(R.id.saved_tasks_text).setVisibility(View.VISIBLE);
+//            findViewById(R.id.sync_button).setEnabled(true);
+//            Log.d("DropboxBackupActivity","On Resume Has Token");
+//        } else {
+//            findViewById(R.id.login_button).setVisibility(View.VISIBLE);
+//            findViewById(R.id.email_text).setVisibility(View.GONE);
+//            findViewById(R.id.name_text).setVisibility(View.GONE);
+//            findViewById(R.id.type_text).setVisibility(View.GONE);
+//            findViewById(R.id.saved_tasks_text).setVisibility(View.GONE);
+//            findViewById(R.id.sync_button).setEnabled(false);
+//            Log.d("DropboxBackupActivity","On Resume Does Not Have Token");
+//        }
     }
 
 
@@ -109,9 +118,10 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
         presenter.syncData();
     }
 
-    public void deliverSyncedTasks(ArrayList<String> tasks){
+    public void deliverIntentResult(Boolean replace, ArrayList<String> tasks){
         Intent return_intent = new Intent();
-        return_intent.putStringArrayListExtra(EXTRA_SYNCED_TASKS, tasks);
+        return_intent.putExtra(EXTRA_REPLACE_TASKS, replace);
+        return_intent.putExtra(EXTRA_SYNCED_TASKS_FILE, tasks);
         setResult(RESULT_OK, return_intent);
         finish();
     }

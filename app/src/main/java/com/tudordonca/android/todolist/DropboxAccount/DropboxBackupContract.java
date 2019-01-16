@@ -10,14 +10,14 @@ public interface DropboxBackupContract {
 
         public void showExistingTasks(ArrayList<String> tasks);
 
-        void deliverSyncedTasks(ArrayList<String> tasks);
+        void deliverIntentResult(Boolean replace, ArrayList<String> tasks);
 
     }
 
 
     interface Presenter {
 
-        void start();
+        void resume(String accessToken);
 
         void initAndLoadData(String accessToken);
 

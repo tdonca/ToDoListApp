@@ -34,11 +34,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     private RecyclerView.LayoutManager taskLayoutManager;
 
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +42,8 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_list);
 
-
+        // create presenter
+        tasksPresenter = new MainListPresenter(this, getFilesDir().toString() );
 
         // Find edit text
         addTaskText = findViewById(R.id.new_task_edit);
@@ -59,14 +56,10 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(taskRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         taskRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        // create presenter
-        tasksPresenter = new MainListPresenter(this, getFilesDir().toString() );
-
         // create adapter for task list
         tasksList = new ArrayList<>();
         taskAdapter = new TaskAdapter(tasksList, tasksPresenter);
         taskRecyclerView.setAdapter(taskAdapter);
-
 
         // display any saved tasks
         tasksPresenter.start();
@@ -74,6 +67,14 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         // display help toast
         Toast.makeText(this, "Tap and hold to remove tasks", Toast.LENGTH_SHORT).show();
     }
+
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
 
 
     public void showTasks( ArrayList<String> tasks ){
@@ -135,12 +136,16 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         }
         else if( requestCode == DROPBOX_BACKUP_REQUEST ){
             if( resultCode == RESULT_OK ){
-
-                // Load tasks obtained from Dropbox
-                Log.d("MainListActivty", "Synced tasks from Dropbox: ");
-                for(String task : data.getStringArrayListExtra(DropboxBackupActivity.EXTRA_SYNCED_TASKS)){
-                    Log.d("MainListActivity", task);
+                if(data.getBooleanExtra(DropboxBackupActivity.EXTRA_REPLACE_TASKS, false)){
+                    // Load tasks obtained from Dropbox
+                    Log.d("MainListActivity", "Synced tasks file from Dropbox: ");
+                    Log.d("MainListActivity", data.getStringExtra(DropboxBackupActivity.EXTRA_SYNCED_TASKS_FILE));
+                    //TODO: tell presenter to overwrite tasks
                 }
+                else{
+                    Log.d("MainListActivity", "Dropbox Backup is turned OFF.");
+                }
+
             }
         }
 

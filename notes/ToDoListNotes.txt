@@ -664,9 +664,9 @@ Specifications:
 
 		onClick():
 			login - presenter - dbclient download file
-					if db file exists - download it and overwrite the existing tasks - save shared prefs of login and token
+					if db file exists - download it and save tasks to db-local-file - save shared prefs of login and token
 					if no db file - save shared prefs login and token
-				  - view - finish activity and return bool overwrite and list of tasks
+				  - view - finish activity and return bool overwrite and file of tasks
 			logout - presenter - update shared prefs
 			       - view - finish activity
  
@@ -674,4 +674,9 @@ Specifications:
 
 			       
 	
+
+	Shared Preferences:
+		Create the prefs file:
+			private String sharedPrefFile = "com.example.android.hellosharedprefs";
+			mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
