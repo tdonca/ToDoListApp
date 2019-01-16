@@ -1,8 +1,7 @@
-package com.tudordonca.android.todolist;
+package com.tudordonca.android.todolist.DropboxUtils;
 
 import android.util.Log;
 
-import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
 
 import java.io.File;

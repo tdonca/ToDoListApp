@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainListActivity"
+            android:name=".MainTaskList.MainListActivity"
             android:label="@string/main_action_bar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,16 +25,16 @@
         <activity
             android:name=".AddTaskActivity"
             android:label="Create Task"
-            android:parentActivityName=".MainListActivity">
+            android:parentActivityName=".MainTaskList.MainListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.tudordonca.android.todolist.MainListActivity" />
+                android:value="com.tudordonca.android.todolist.MainTaskList.MainListActivity" />
         </activity>
-        <activity android:name=".DropboxBackupActivity"
+        <activity android:name=".DropboxAccount.DropboxBackupActivity"
             android:label="Connect to Dropbox">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.tudordonca.android.todolist.MainListActivity" />
+                android:value="com.tudordonca.android.todolist.MainTaskList.MainListActivity" />
         </activity>
 
         <activity

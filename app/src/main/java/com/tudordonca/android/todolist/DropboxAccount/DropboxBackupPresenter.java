@@ -1,12 +1,9 @@
-package com.tudordonca.android.todolist;
+package com.tudordonca.android.todolist.DropboxAccount;
 
-import android.content.SharedPreferences;
-import android.provider.Contacts;
 import android.util.Log;
 
-import com.dropbox.core.android.Auth;
 import com.dropbox.core.v2.users.FullAccount;
-import com.tudordonca.android.todolist.DropboxBackupContract.Presenter;
+import com.tudordonca.android.todolist.DropboxUtils.DropboxClientFactory;
 
 import org.apache.commons.io.FileUtils;
 

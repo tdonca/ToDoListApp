@@ -293,7 +293,7 @@ MVP with Multiple Activities:
 		            android:parentActivityName=".MainListActivity">
 		            <meta-data
 		                android:name="android.support.PARENT_ACTIVITY"
-		                android:value="com.tudordonca.android.todolist.MainListActivity" />	
+		                android:value="com.tudordonca.android.todolist.MainTaskList.MainListActivity" />
 		        </activity>
 
 
@@ -629,17 +629,49 @@ ToDoList Redesign:
 
 
 
+Specifications:
+	MainActivity:
+		onCreate():
+			presenter - create dbclient (factory)
+			presenter - load tasks (db file or local file)
+			view - set up recycler view
+
+		onResume():
+			presenter - resume
+			view - showTasks
+
+		onClick():
+			remove - view - remove from recyclerview and update UI - presenter - remove task
+			add - presenter - add task - view - update recyclerview
+			dropbox - presenter - call view launch db activity
+
+		onPause():
+			presenter - save tasks to file or dropbox based on shared preferences
 
 
 
+	DropboxAccountActivity:
+		onCreate():
+			presenter - get shared preferences and access token if already logged in
+			view - set up account display
+
+		onResume():
+			view - get shared prefs from Android
+			presenter - if shared prefs, load data - view - show account info and logout options
+						if no prefs, view - show login options
 
 
 
+		onClick():
+			login - presenter - dbclient download file
+					if db file exists - download it and overwrite the existing tasks - save shared prefs of login and token
+					if no db file - save shared prefs login and token
+				  - view - finish activity and return bool overwrite and list of tasks
+			logout - presenter - update shared prefs
+			       - view - finish activity
+ 
 
 
-
-
-	3. EditTask Activity
-
+			       
 	
 

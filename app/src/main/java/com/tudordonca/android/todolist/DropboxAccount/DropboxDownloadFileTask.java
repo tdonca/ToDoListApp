@@ -1,10 +1,9 @@
-package com.tudordonca.android.todolist;
+package com.tudordonca.android.todolist.DropboxAccount;
 
 import android.os.AsyncTask;
-import android.telecom.Call;
 
 import com.dropbox.core.v2.DbxClientV2;
-import com.dropbox.core.v2.users.FullAccount;
+import com.tudordonca.android.todolist.DropboxUtils.DropboxUtils;
 
 import java.io.File;
 

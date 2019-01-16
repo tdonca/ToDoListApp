@@ -1,4 +1,4 @@
-package com.tudordonca.android.todolist;
+package com.tudordonca.android.todolist.MainTaskList;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.tudordonca.android.todolist.R;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.tudordonca.android.todolist;
+package com.tudordonca.android.todolist.MainTaskList;
 
 
     /* Contract between Model, View, and Presenter for the Main Task List Activity
@@ -17,8 +17,6 @@ public interface MainListContract {
 
         void showTasks( ArrayList<String> tasks );
 
-        void showCreateTaskUI();
-
         void showDropboxBackupUI();
 
         void showEditTaskUI();
@@ -31,7 +29,7 @@ public interface MainListContract {
 
         void start();
 
-        void createTask();
+        void resume();
 
         void dropboxBackup();
 
@@ -39,7 +37,9 @@ public interface MainListContract {
 
         void removeTask( int position );
 
+        void loadTasks();
 
+        void saveTasks();
 
 
     }

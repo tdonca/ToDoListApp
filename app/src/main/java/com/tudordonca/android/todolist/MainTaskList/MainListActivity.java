@@ -1,4 +1,4 @@
-package com.tudordonca.android.todolist;
+package com.tudordonca.android.todolist.MainTaskList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +14,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.tudordonca.android.todolist.AddTaskActivity;
+import com.tudordonca.android.todolist.DropboxAccount.DropboxBackupActivity;
+import com.tudordonca.android.todolist.R;
+
 import java.util.ArrayList;
 
 public class MainListActivity extends AppCompatActivity implements MainListContract.TaskListView {
@@ -82,13 +86,6 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     }
 
 
-    public void showCreateTaskUI(){
-
-        // create intent and launch CreateTaskActivity with result
-        Log.i("View", "create Intent and launch CreateTaskActivity");
-        Intent create_task_intent = new Intent( this, AddTaskActivity.class );
-        startActivityForResult(create_task_intent, NEW_TASK_REQUEST);
-    }
 
     public void showDropboxBackupUI(){
         Log.i("View", "create Intent and launch DropboxBackupActivity");
@@ -149,11 +146,4 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
     }
 
-    public void createTask(View view) {
-
-        // call presenter createTask function
-        Log.i("View", "call presenter createTask()");
-        tasksPresenter.createTask();
-
-    }
 }

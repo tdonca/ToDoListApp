@@ -1,6 +1,8 @@
-package com.tudordonca.android.todolist;
+package com.tudordonca.android.todolist.MainTaskList;
 
 import android.util.Log;
+
+import com.tudordonca.android.todolist.MainTaskList.MainListContract;
 
 import org.apache.commons.io.FileUtils;
 
@@ -28,11 +30,9 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
         tasksView.showTasks(tasks);
     }
 
-    public void createTask(){
+    @Override
+    public void resume() {
 
-        // call view's showCreateTask function
-        Log.i("Presenter", "modify UI for CreateTask");
-        tasksView.showCreateTaskUI();
     }
 
 
@@ -56,6 +56,16 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
         writeTasks(tasksStorageFile);
         Log.i("Presenter", "Num tasks: " + tasks.size());
         tasksView.showTasks(tasks);
+    }
+
+    @Override
+    public void loadTasks() {
+
+    }
+
+    @Override
+    public void saveTasks() {
+
     }
 
 

@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 public class AddTaskActivity extends AppCompatActivity {
 
-    static final String EXTRA_NEW_TASK = "com.tudordonca.android.todolist.NEW_TASK";
+    public static final String EXTRA_NEW_TASK = "com.tudordonca.android.todolist.NEW_TASK";
 
     private EditText m_edit_new_task;
 
