@@ -1,6 +1,7 @@
 package com.tudordonca.android.todolist;
 
 import android.content.SharedPreferences;
+import android.provider.Contacts;
 import android.util.Log;
 
 import com.dropbox.core.android.Auth;
@@ -19,12 +20,14 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
     private DropboxAccountTask.Callback accountCallback;
     private DropboxDownloadFileTask.Callback fileCallback;
     private String filedir, filename;
+    private ArrayList<String> tasks;
 
 
     DropboxBackupPresenter(DropboxBackupContract.View view, String filedir, String filename){
         UIView = view;
         this.filedir = filedir;
         this.filename = filename;
+        tasks = new ArrayList<>();
     }
 
     @Override
@@ -46,7 +49,7 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
             public void onComplete(File result) {
                 //TODO: read db-file and display tasks on the screen
                 try{
-                    ArrayList<String> tasks = new ArrayList<>(FileUtils.readLines(result, "UTF-8"));
+                    tasks = new ArrayList<>(FileUtils.readLines(result, "UTF-8"));
                     UIView.showExistingTasks(tasks);
                 }
                 catch(Exception e){
@@ -84,6 +87,9 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
     }
 
 
+    public void syncData(){
+        UIView.deliverSyncedTasks(tasks);
+    }
 
 
 }

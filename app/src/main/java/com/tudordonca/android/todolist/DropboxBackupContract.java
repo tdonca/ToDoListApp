@@ -10,6 +10,8 @@ public interface DropboxBackupContract {
 
         public void showExistingTasks(ArrayList<String> tasks);
 
+        void deliverSyncedTasks(ArrayList<String> tasks);
+
     }
 
 
@@ -19,6 +21,7 @@ public interface DropboxBackupContract {
 
         void initAndLoadData(String accessToken);
 
+        void syncData();
     }
 
 }

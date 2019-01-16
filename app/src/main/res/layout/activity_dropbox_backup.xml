@@ -48,7 +48,8 @@
             android:id="@+id/sync_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sync"/>
+            android:text="Sync"
+            android:onClick="onSyncData"/>
 
         <TextView
             android:id="@+id/tasks_text"

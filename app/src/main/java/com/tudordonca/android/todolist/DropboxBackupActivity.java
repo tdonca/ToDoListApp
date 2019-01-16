@@ -1,5 +1,6 @@
 package com.tudordonca.android.todolist;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,9 @@ import com.dropbox.core.android.Auth;
 import java.util.ArrayList;
 
 public class DropboxBackupActivity extends AppCompatActivity implements DropboxBackupContract.View {
+
+    static final String EXTRA_SYNCED_TASKS = "com.tudordonca.android.todolist.SYNCED_TASKS";
+
 
     private DropboxBackupContract.Presenter presenter;
     @Override
@@ -100,5 +104,15 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
         return accessToken != null;
     }
 
+    public void onSyncData(View view){
+        presenter.syncData();
+    }
+
+    public void deliverSyncedTasks(ArrayList<String> tasks){
+        Intent return_intent = new Intent();
+        return_intent.putStringArrayListExtra(EXTRA_SYNCED_TASKS, tasks);
+        setResult(RESULT_OK, return_intent);
+        finish();
+    }
 
 }

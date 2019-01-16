@@ -140,6 +140,10 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
             if( resultCode == RESULT_OK ){
 
                 // Load tasks obtained from Dropbox
+                Log.d("MainListActivty", "Synced tasks from Dropbox: ");
+                for(String task : data.getStringArrayListExtra(DropboxBackupActivity.EXTRA_SYNCED_TASKS)){
+                    Log.d("MainListActivity", task);
+                }
             }
         }
 
