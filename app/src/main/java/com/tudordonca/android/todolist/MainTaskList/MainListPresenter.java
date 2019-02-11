@@ -24,24 +24,31 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
     }
 
 
-    public void start(){
-
+    @Override
+    public void loadTasks() {
+        // read tasks from local file
+        // show tasks
         readTasks(tasksStorageFile);
         tasksView.showTasks(tasks);
     }
 
-    @Override
-    public void resume() {
 
+
+    private void readTasks( File tasksFile ){
+
+        try{
+            tasks.clear();
+            tasks.addAll( FileUtils.readLines( tasksFile, "UTF-8" ) );
+        }
+        catch( Exception e ){
+            e.printStackTrace();
+            Log.e("Presenter", "Loading Tasks Failed!");
+        }
     }
 
 
-    public void dropboxBackup() {
-        Log.i("Presenter", "modify UI for DropboxBackupTask");
-        tasksView.showDropboxBackupUI();
-    }
 
-
+    //TODO: stop writing to file every time, only write on onPause()
     public void addTask(String task ){
 
         tasks.add(task);
@@ -50,6 +57,9 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
         tasksView.showTasks(tasks);
     }
 
+
+
+    //TODO: stop writing to file every time, only write on onPause()
     public void removeTask( int position ){
 
         tasks.remove(position);
@@ -58,27 +68,19 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
         tasksView.showTasks(tasks);
     }
 
-    @Override
-    public void loadTasks() {
-
+    public void dropboxBackup() {
+        Log.i("Presenter", "modify UI for DropboxBackupTask");
+        tasksView.showDropboxBackupUI();
     }
 
     @Override
     public void saveTasks() {
-
+        // save current tasks to the file
+        // look at passed-in shared-prefs for dropbox sync
+        // upload tasks file to dropbox
     }
 
 
-    private void readTasks( File tasksFile ){
-
-        try{
-            tasks.addAll( FileUtils.readLines( tasksFile, "UTF-8" ) );
-        }
-        catch( Exception e ){
-            e.printStackTrace();
-            Log.e("Presenter", "Loading Tasks Failed!");
-        }
-    }
 
     private void writeTasks( File tasksFile ){
 

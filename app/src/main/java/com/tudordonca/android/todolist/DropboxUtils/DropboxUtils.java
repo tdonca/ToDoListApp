@@ -16,7 +16,7 @@ public class DropboxUtils {
 
 
 
-    static Boolean saveDropboxFile(DbxClientV2 client, String filePath, String fileName){
+    public static Boolean saveDropboxFile(DbxClientV2 client, String filePath, String fileName){
 
 
         Boolean saved = false;
@@ -45,7 +45,7 @@ public class DropboxUtils {
     }
 
 
-    static Boolean getDropboxFile(DbxClientV2 client, String filePath, String fileName){
+    public static Boolean getDropboxFile(DbxClientV2 client, String filePath, String fileName){
 
 
         // create local file and OutputSteam

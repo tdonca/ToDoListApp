@@ -114,10 +114,13 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
         return accessToken != null;
     }
 
+    //TODO: update shared-prefs
+    //tell presenter to sync
     public void onSyncData(View view){
         presenter.syncData();
     }
 
+    //TODO: change to just send back result "file overwritten" or "no existing file"
     public void deliverIntentResult(Boolean replace, ArrayList<String> tasks){
         Intent return_intent = new Intent();
         return_intent.putExtra(EXTRA_REPLACE_TASKS, replace);

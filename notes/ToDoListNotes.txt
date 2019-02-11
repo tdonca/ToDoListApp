@@ -680,3 +680,42 @@ Specifications:
 			private String sharedPrefFile = "com.example.android.hellosharedprefs";
 			mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
+
+
+===============================================================2/6/19
+
+
+Finalize the App:
+	1. Main Activity
+		RecyclerView list with the add button and entry field at the bottom of the page
+		On Startup:
+			Loads tasks from local file
+		Add tasks using the bottom button
+		Remove tasks using long-click
+		On Pause:
+			Save current tasks list to local file
+			If connected to Dropbox(shared prefs)
+				upload local tasks file to Dropbox
+
+
+	2. Dropbox Backup Activity
+		Button to login to Dropbox using OAuth2
+		save token to shared-prefs
+		
+		Sync button to start saving tasks to Dropbox
+		Save the sync setting to shared-prefs
+		If tasks file already exists on Dropbox:
+			Download it and save it to the local tasks file
+		Sync button changes to "Unsync" button
+
+		Keep Download/Upload file functions in DropBox utils
+		Just call the functions directly for now
+		Ask Steve how to handle Asynchronous (probably not AsyncTask) also in onPause to do final network upload
+			Retrofit? but Dropbox already has API client interfaces
+
+==================================================================2/7/19
+
+
+
+
+

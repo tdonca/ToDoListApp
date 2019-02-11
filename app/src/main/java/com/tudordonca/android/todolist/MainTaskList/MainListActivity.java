@@ -57,12 +57,11 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         taskRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // create adapter for task list
+        //TODO: use the ArrayList actually in Presenter, and use getTasks() to set the adapter
         tasksList = new ArrayList<>();
         taskAdapter = new TaskAdapter(tasksList, tasksPresenter);
         taskRecyclerView.setAdapter(taskAdapter);
 
-        // display any saved tasks
-        tasksPresenter.start();
 
         // display help toast
         Toast.makeText(this, "Tap and hold to remove tasks", Toast.LENGTH_SHORT).show();
@@ -75,10 +74,15 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         return true;
     }
 
+    protected void onResume(){
+        super.onResume();
+        tasksPresenter.loadTasks();
+    }
 
 
     public void showTasks( ArrayList<String> tasks ){
 
+        //TODO: remove the taskList array and instead just call notify() on the adapter
         Log.i("View", "show updated tasks");
         tasksList.clear();
         tasksList.addAll(tasks);
@@ -96,7 +100,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
     public void showEditTaskUI(){
         Log.i("View", "create Intent and launch EditTaskActivity");
-
+    //TODO: remove
     }
 
 
@@ -140,7 +144,9 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
                     // Load tasks obtained from Dropbox
                     Log.d("MainListActivity", "Synced tasks file from Dropbox: ");
                     Log.d("MainListActivity", data.getStringExtra(DropboxBackupActivity.EXTRA_SYNCED_TASKS_FILE));
-                    //TODO: tell presenter to overwrite tasks
+                    //TODO: tell presenter to overwrite tasks if dropbox file was downloaded
+                    // call presenter replace tasks function
+                    // ONLY IF shared-prefs has SYNC ON
                 }
                 else{
                     Log.d("MainListActivity", "Dropbox Backup is turned OFF.");
@@ -150,5 +156,9 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         }
 
     }
+
+    //TODO: onPause() function
+    // Call presenter saveTasks() function
+    // Pass in shared prefs of dropbox backup
 
 }

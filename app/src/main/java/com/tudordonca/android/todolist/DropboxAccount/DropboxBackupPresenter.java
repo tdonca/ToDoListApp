@@ -38,6 +38,7 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
         // tell view to display
     }
 
+    //TODO: change to just load account
     public void initAndLoadData(String accessToken){
         DropboxClientFactory.init(accessToken);
         loadAccount();
@@ -89,7 +90,10 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
 
     }
 
-
+    //TODO: Sync button pressed, start syncing with Dropbox
+    // try to download existing file
+    // overwrite existing local tasks file, send info in Intent result
+    // if no file, return no file, send info in Intent result
     public void syncData(){
         UIView.deliverIntentResult(true, tasks);
     }
