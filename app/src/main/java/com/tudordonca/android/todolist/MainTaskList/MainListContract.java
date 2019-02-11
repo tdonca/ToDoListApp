@@ -19,8 +19,6 @@ public interface MainListContract {
 
         void showDropboxBackupUI();
 
-        void showEditTaskUI();
-
     }
 
 

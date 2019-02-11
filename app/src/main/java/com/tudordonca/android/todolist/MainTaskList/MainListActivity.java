@@ -27,7 +27,6 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     static final int DROPBOX_BACKUP_REQUEST = 2;
 
     private MainListContract.TaskListPresenter tasksPresenter;
-    //private ArrayList<String> tasksList;
     private EditText addTaskText;
     private RecyclerView taskRecyclerView;
     private RecyclerView.Adapter taskAdapter;
@@ -57,8 +56,6 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         taskRecyclerView.addItemDecoration(dividerItemDecoration);
 
         // create adapter for task list
-        //TODO: use the ArrayList actually in Presenter, and use getTasks() to set the adapter
-        //tasksList = new ArrayList<>();
         taskAdapter = new TaskAdapter(tasksPresenter);
         taskRecyclerView.setAdapter(taskAdapter);
 
@@ -81,11 +78,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
 
     public void showTasks( ArrayList<String> tasks ){
-
-        //TODO: remove the taskList array and instead just call notify() on the adapter
         Log.i("View", "show updated tasks");
-        //tasksList.clear();
-        //tasksList.addAll(tasks);
         taskAdapter.notifyDataSetChanged();
         //Log.i("View", "Num tasks: " + tasksList.size());
     }
@@ -98,10 +91,6 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         startActivityForResult(dropboxBackupIntent, DROPBOX_BACKUP_REQUEST);
     }
 
-    public void showEditTaskUI(){
-        Log.i("View", "create Intent and launch EditTaskActivity");
-    //TODO: remove
-    }
 
 
     public void addTask(View view){
@@ -160,5 +149,8 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     //TODO: onPause() function
     // Call presenter saveTasks() function
     // Pass in shared prefs of dropbox backup
-
+    protected void onPause(){
+        super.onPause();
+        tasksPresenter.saveTasks();
+    }
 }

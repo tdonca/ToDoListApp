@@ -24,6 +24,7 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
     }
 
 
+    @Override
     public ArrayList<String> getTaskData(){
         return tasks;
     }
@@ -39,7 +40,7 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
 
 
     private void readTasks( File tasksFile ){
-
+        Log.i("Presenter", "Reading tasks from file.");
         try{
             tasks.clear();
             tasks.addAll( FileUtils.readLines( tasksFile, "UTF-8" ) );
@@ -51,43 +52,43 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
     }
 
 
-
-    //TODO: stop writing to file every time, only write on onPause()
+    @Override
     public void addTask(String task ){
-
         tasks.add(task);
-        writeTasks(tasksStorageFile);
-        Log.i("Presenter", "Num tasks: " + tasks.size());
+        Log.i("Presenter", "Added task, now there are num: " + tasks.size());
         tasksView.showTasks(tasks);
     }
 
 
 
-    //TODO: stop writing to file every time, only write on onPause()
+    @Override
     public void removeTask( int position ){
-
         tasks.remove(position);
-        writeTasks(tasksStorageFile);
-        Log.i("Presenter", "Num tasks: " + tasks.size());
+        Log.i("Presenter", "Removed task, now there are num: " + tasks.size());
         tasksView.showTasks(tasks);
     }
 
+
+    @Override
     public void dropboxBackup() {
         Log.i("Presenter", "modify UI for DropboxBackupTask");
         tasksView.showDropboxBackupUI();
     }
+
+
 
     @Override
     public void saveTasks() {
         // save current tasks to the file
         // look at passed-in shared-prefs for dropbox sync
         // upload tasks file to dropbox
+        writeTasks(tasksStorageFile);
     }
 
 
 
     private void writeTasks( File tasksFile ){
-
+        Log.i("Presenter", "Writing tasks to file.");
         try{
             FileUtils.writeLines( tasksFile, tasks );
         }
