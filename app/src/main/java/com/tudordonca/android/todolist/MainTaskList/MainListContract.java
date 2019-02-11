@@ -27,6 +27,8 @@ public interface MainListContract {
 
     interface TaskListPresenter {
 
+        ArrayList<String> getTaskData();
+
         void dropboxBackup();
 
         void addTask( String task );

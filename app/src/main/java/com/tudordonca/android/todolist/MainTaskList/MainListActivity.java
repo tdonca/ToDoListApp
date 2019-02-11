@@ -27,7 +27,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     static final int DROPBOX_BACKUP_REQUEST = 2;
 
     private MainListContract.TaskListPresenter tasksPresenter;
-    private ArrayList<String> tasksList;
+    //private ArrayList<String> tasksList;
     private EditText addTaskText;
     private RecyclerView taskRecyclerView;
     private RecyclerView.Adapter taskAdapter;
@@ -58,8 +58,8 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
         // create adapter for task list
         //TODO: use the ArrayList actually in Presenter, and use getTasks() to set the adapter
-        tasksList = new ArrayList<>();
-        taskAdapter = new TaskAdapter(tasksList, tasksPresenter);
+        //tasksList = new ArrayList<>();
+        taskAdapter = new TaskAdapter(tasksPresenter);
         taskRecyclerView.setAdapter(taskAdapter);
 
 
@@ -84,10 +84,10 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
         //TODO: remove the taskList array and instead just call notify() on the adapter
         Log.i("View", "show updated tasks");
-        tasksList.clear();
-        tasksList.addAll(tasks);
+        //tasksList.clear();
+        //tasksList.addAll(tasks);
         taskAdapter.notifyDataSetChanged();
-        Log.i("View", "Num tasks: " + tasksList.size());
+        //Log.i("View", "Num tasks: " + tasksList.size());
     }
 
 

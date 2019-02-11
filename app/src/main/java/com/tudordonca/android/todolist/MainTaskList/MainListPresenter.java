@@ -24,6 +24,10 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
     }
 
 
+    public ArrayList<String> getTaskData(){
+        return tasks;
+    }
+
     @Override
     public void loadTasks() {
         // read tasks from local file

@@ -713,9 +713,20 @@ Finalize the App:
 		Ask Steve how to handle Asynchronous (probably not AsyncTask) also in onPause to do final network upload
 			Retrofit? but Dropbox already has API client interfaces
 
-==================================================================2/7/19
+==================================================================2/11/19
+
+
+Removing taskslist array redundancy. Have The View and the Adapter just access the data directly from the presenter
+Right now the adpapter is double deleting since its deleting the data, and then telling the presenter to also delete the data
 
 
 
 
+
+Steve Questions:
+	1. Dagger - used to create Android Java client for a WEB API?
+		In the case of Dropbox, not needed since they already have a client?
+	2. When to do network calls/database loads/backups? 
+		onPause/onResume?
+	3. How to do Async work if they are called onPause/onResume? Best to use Service?
 

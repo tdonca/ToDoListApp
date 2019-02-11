@@ -14,11 +14,11 @@ import java.util.ArrayList;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
-    private ArrayList<String> dataset;
+    //private ArrayList<String> dataset;
     private MainListContract.TaskListPresenter presenter;
 
-    public TaskAdapter(ArrayList<String> data, MainListContract.TaskListPresenter presenter){
-        dataset = data;
+    public TaskAdapter(MainListContract.TaskListPresenter presenter){
+        //dataset = data;
         this.presenter = presenter;
     }
 
@@ -39,9 +39,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
             if(position != RecyclerView.NO_POSITION){
-                dataset.remove(position);
-                notifyItemRemoved(position);
+                //dataset.remove(position);
                 presenter.removeTask(position);
+                notifyItemRemoved(position);
+
 
             }
             return true;
@@ -63,12 +64,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.TaskViewHolder taskViewHolder, int i) {
 
-        String item = dataset.get(i);
+        String item = presenter.getTaskData().get(i);
         TextView taskText = taskViewHolder.taskText;
         taskText.setText(item);
     }
 
     public int getItemCount(){
-        return dataset.size();
+        return presenter.getTaskData().size();
     }
 }
