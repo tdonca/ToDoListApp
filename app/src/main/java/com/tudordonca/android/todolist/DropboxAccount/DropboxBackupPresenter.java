@@ -2,6 +2,7 @@ package com.tudordonca.android.todolist.DropboxAccount;
 
 import android.util.Log;
 
+import com.dropbox.core.android.Auth;
 import com.dropbox.core.v2.users.FullAccount;
 import com.tudordonca.android.todolist.DropboxUtils.DropboxClientFactory;
 
@@ -16,86 +17,36 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
     private DropboxAccountTask dropboxAccountTask;
     private DropboxAccountTask.Callback accountCallback;
     private DropboxDownloadFileTask.Callback fileCallback;
-    private String filedir, filename;
+    private String filename;
     private ArrayList<String> tasks;
 
 
-    DropboxBackupPresenter(DropboxBackupContract.View view, String filedir, String filename){
+    DropboxBackupPresenter(DropboxBackupContract.View view, String filename) {
         UIView = view;
-        this.filedir = filedir;
         this.filename = filename;
         tasks = new ArrayList<>();
     }
 
-    @Override
-    public void resume(String accessToken) {
-        // check access token
 
-        // get a new one if necessary
-
-        // get account data
-
-        // tell view to display
-    }
-
-    //TODO: change to just load account
-    public void initAndLoadData(String accessToken){
+    public void loadAccount(String accessToken){
         DropboxClientFactory.init(accessToken);
-        loadAccount();
+       //TODO: load account network util
+
+
+        UIView.showAccountData("test", "test", "test");
     }
 
-
-    // This needs to be cleaned up somehow...
-    private void loadAccount(){
-
-        fileCallback = new DropboxDownloadFileTask.Callback() {
-            @Override
-            public void onComplete(File result) {
-                //TODO: read db-file and display tasks on the screen
-                try{
-                    tasks = new ArrayList<>(FileUtils.readLines(result, "UTF-8"));
-                    UIView.showExistingTasks(tasks);
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        };
-
-        accountCallback = new DropboxAccountTask.Callback() {
-            @Override
-            public void onComplete(FullAccount result) {
-                UIView.showAccountData(result.getName().getDisplayName(), result.getEmail(), result.getAccountType().name());
-
-                // Download the saved tasks to a file
-                new DropboxDownloadFileTask(DropboxClientFactory.getClient(), fileCallback, filedir, filename).execute();
-
-                Log.d(getClass().getName(),"loadData worked onComplete");
-            }
-
-            @Override
-            public void onError(Exception e) {
-                //UIView.showAccountData("N/A", "N/A", "N/A");
-                Log.e(getClass().getName(), "Failed to get account details.", e);
-            }
-        };
-
-        new DropboxAccountTask(DropboxClientFactory.getClient(), accountCallback).execute();
-
-    }
 
     //TODO: Sync button pressed, start syncing with Dropbox
     // try to download existing file
-    // overwrite existing local tasks file, send info in Intent result
-    // if no file, return no file, send info in Intent result
+    // if remote file exists, overwrite existing local tasks file, send info in Intent result
+    // if no remote, do nothing, send back replace=false
     public void syncData(){
+        //TODO: download file network util
         UIView.deliverIntentResult(true, tasks);
+
+        // else
+        //  UIView.deliverIntentResult(false, tasks);
     }
 
 

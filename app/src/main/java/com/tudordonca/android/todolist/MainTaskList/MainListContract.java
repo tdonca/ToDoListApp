@@ -35,7 +35,7 @@ public interface MainListContract {
 
         void loadTasks();
 
-        void saveTasks();
+        void saveTasks(boolean dropboxSync);
 
 
     }

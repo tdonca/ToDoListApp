@@ -16,24 +16,19 @@ import java.util.ArrayList;
 
 public class DropboxBackupActivity extends AppCompatActivity implements DropboxBackupContract.View {
 
-    public static final String EXTRA_SYNCED_TASKS_FILE = "com.tudordonca.android.todolist.SYNCED_TASKS";
     public static final String EXTRA_REPLACE_TASKS = "com.tudordonca.android.todolist.REPLACE_TASKS";
     private SharedPreferences preferences;
-
     private DropboxBackupContract.Presenter presenter;
-    @Override
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dropbox_backup);
 
+        presenter = new DropboxBackupPresenter(this, getString(R.string.local_tasks_file));
 
-        // Setup presenter
-        presenter = new DropboxBackupPresenter(this, getFilesDir().toString(), getString(R.string.dropbox_local_file));
+        preferences = getSharedPreferences(getString(R.string.shared_prefs_file), MODE_PRIVATE);
 
-        // Setup preferences
-        preferences = getSharedPreferences("com.tudordonca.android.todolist", MODE_PRIVATE);
-
-        //Setup UI
         // Setup Dropbox login button
         Button loginButton = (Button) findViewById(R.id.login_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -51,80 +46,61 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
     protected void onResume(){
         super.onResume();
 
-        String accessToken = preferences.getString("access-token", null);
-        presenter.resume(accessToken);
+        String accessToken = preferences.getString(getString(R.string.prefs_access_token), null);
 
-//        if (accessToken == null) {
-//            accessToken = Auth.getOAuth2Token();
-//            if (accessToken != null) {
-//                preferences.edit().putString("access-token", accessToken).apply();
-//                presenter.initAndLoadData(accessToken);
-//            }
-//        } else {
-//            presenter.initAndLoadData(accessToken);
-//        }
-//
-//        if (hasToken()) {
-//            findViewById(R.id.login_button).setVisibility(View.GONE);
-//            findViewById(R.id.email_text).setVisibility(View.VISIBLE);
-//            findViewById(R.id.name_text).setVisibility(View.VISIBLE);
-//            findViewById(R.id.type_text).setVisibility(View.VISIBLE);
-//            findViewById(R.id.saved_tasks_text).setVisibility(View.VISIBLE);
-//            findViewById(R.id.sync_button).setEnabled(true);
-//            Log.d("DropboxBackupActivity","On Resume Has Token");
-//        } else {
-//            findViewById(R.id.login_button).setVisibility(View.VISIBLE);
-//            findViewById(R.id.email_text).setVisibility(View.GONE);
-//            findViewById(R.id.name_text).setVisibility(View.GONE);
-//            findViewById(R.id.type_text).setVisibility(View.GONE);
-//            findViewById(R.id.saved_tasks_text).setVisibility(View.GONE);
-//            findViewById(R.id.sync_button).setEnabled(false);
-//            Log.d("DropboxBackupActivity","On Resume Does Not Have Token");
-//        }
+        if (accessToken == null) {
+            accessToken = Auth.getOAuth2Token();
+            if (accessToken != null) {
+                preferences.edit().putString(getString(R.string.prefs_access_token), accessToken).apply();
+                presenter.loadAccount(accessToken);
+            }
+            else{
+                hideAccountData();
+                Log.d("DropboxBackupActivity","On Resume Does Not Have Token");
+            }
+        } else {
+            presenter.loadAccount(accessToken);
+        }
+
     }
 
 
 
     public void showAccountData(String name, String email, String type){
+        findViewById(R.id.login_button).setVisibility(View.GONE);
+        findViewById(R.id.email_text).setVisibility(View.VISIBLE);
+        findViewById(R.id.name_text).setVisibility(View.VISIBLE);
+        findViewById(R.id.type_text).setVisibility(View.VISIBLE);
+        findViewById(R.id.sync_button).setEnabled(true);
+
         ((TextView)findViewById(R.id.email_text)).setText(email);
         ((TextView)findViewById(R.id.name_text)).setText(name);
         ((TextView)findViewById(R.id.type_text)).setText(type);
     }
 
-    public void showExistingTasks(ArrayList<String> tasks){
-        // display formatted tasks
-        ((TextView)findViewById(R.id.saved_tasks_text)).setText(formatSavedTasks(tasks));
-    }
-
-    public String formatSavedTasks(ArrayList<String> tasks){
-        // put all tasks on separate lines
-        // or display "No saved tasks"
-        String result = "DB Saved Tasks: \n";
-        for(String task : tasks){
-            result += task + "\n";
-        }
-        return result;
+    public void hideAccountData(){
+        findViewById(R.id.login_button).setVisibility(View.VISIBLE);
+        findViewById(R.id.email_text).setVisibility(View.GONE);
+        findViewById(R.id.name_text).setVisibility(View.GONE);
+        findViewById(R.id.type_text).setVisibility(View.GONE);
+        findViewById(R.id.sync_button).setEnabled(false);
     }
 
 
-    protected boolean hasToken() {
-        //TODO: change name
-        SharedPreferences prefs = getSharedPreferences("dropbox-sample", MODE_PRIVATE);
-        String accessToken = prefs.getString("access-token", null);
-        return accessToken != null;
-    }
 
-    //TODO: update shared-prefs
-    //tell presenter to sync
+    // start sync
     public void onSyncData(View view){
+        preferences.edit().putBoolean(getString(R.string.prefs_dropbox_sync), true).apply();
         presenter.syncData();
+
+        // TODO: add unsync option
     }
 
-    //TODO: change to just send back result "file overwritten" or "no existing file"
-    public void deliverIntentResult(Boolean replace, ArrayList<String> tasks){
+
+
+    public void deliverIntentResult(Boolean replaceLocal, ArrayList<String> tasks){
         Intent return_intent = new Intent();
-        return_intent.putExtra(EXTRA_REPLACE_TASKS, replace);
-        return_intent.putExtra(EXTRA_SYNCED_TASKS_FILE, tasks);
+        return_intent.putExtra(EXTRA_REPLACE_TASKS, replaceLocal);
         setResult(RESULT_OK, return_intent);
         finish();
     }

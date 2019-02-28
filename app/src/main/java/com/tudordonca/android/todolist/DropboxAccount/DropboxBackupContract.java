@@ -8,18 +8,14 @@ public interface DropboxBackupContract {
 
         public void showAccountData(String name, String email, String type);
 
-        public void showExistingTasks(ArrayList<String> tasks);
-
-        void deliverIntentResult(Boolean replace, ArrayList<String> tasks);
+        void deliverIntentResult(Boolean replaceLocal, ArrayList<String> tasks);
 
     }
 
 
     interface Presenter {
 
-        void resume(String accessToken);
-
-        void initAndLoadData(String accessToken);
+        void loadAccount(String accessToken);
 
         void syncData();
     }

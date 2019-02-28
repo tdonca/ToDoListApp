@@ -717,11 +717,42 @@ Finalize the App:
 
 
 Removing taskslist array redundancy. Have The View and the Adapter just access the data directly from the presenter
-Right now the adpapter is double deleting since its deleting the data, and then telling the presenter to also delete the data
+Right now the adapter is double deleting since its deleting the data, and then telling the presenter to also delete the data
+
+
+1. Read from shared prefs if "dropbox-sync" is enbled
+2. Move dropbox calls to NetworkUtils static class
+	getDropboxAccount()
+	downloadDropboxFile()
+	uploadDropboxFile()
+3. Call networkutils directly in presenter code, worry about Async later
+
+
+
+Checking shared prefs:
+	getSharedPreferences("mytasksapp", MODE_PRIVATE).getBoolean("dropbox-sync", false)
+
+
+
+==================================================================2/27/19
+
+
+Tasks Activity:
+	Upload File to Dropbox
+
+Dropbox Activity:
+	Download File from Dropbox
+	Get Account Info from Dropbox
+
+
+
+Network Utils:
+	
 
 
 
 
+===================================
 
 Steve Questions:
 	1. Dagger - used to create Android Java client for a WEB API?

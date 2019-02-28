@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 public class MainListActivity extends AppCompatActivity implements MainListContract.TaskListView {
 
-    static final int NEW_TASK_REQUEST = 1;
     static final int DROPBOX_BACKUP_REQUEST = 2;
 
     private MainListContract.TaskListPresenter tasksPresenter;
@@ -44,10 +43,9 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         // create presenter
         tasksPresenter = new MainListPresenter(this, getFilesDir().toString() );
 
-        // Find edit text
         addTaskText = findViewById(R.id.new_task_edit);
 
-        // Setup Recycler View
+        // Tasks Recycler View
         taskRecyclerView = findViewById(R.id.task_list_recycler_view);
         taskRecyclerView.setHasFixedSize(true);
         taskLayoutManager = new LinearLayoutManager(this);
@@ -55,7 +53,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(taskRecyclerView.getContext(), DividerItemDecoration.VERTICAL);
         taskRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        // create adapter for task list
+        // Tasks Adapter for Recycler View
         taskAdapter = new TaskAdapter(tasksPresenter);
         taskRecyclerView.setAdapter(taskAdapter);
 
@@ -84,7 +82,6 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     }
 
 
-
     public void showDropboxBackupUI(){
         Log.i("View", "create Intent and launch DropboxBackupActivity");
         Intent dropboxBackupIntent = new Intent( this, DropboxBackupActivity.class );
@@ -97,11 +94,10 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         Log.i("View", "call presenter addTask()");
         String taskText = addTaskText.getText().toString();
         if(!taskText.equals("")){
-            //save task
             tasksPresenter.addTask(taskText);
-            // clear textbox
+
+            // clear input and keyboard
             addTaskText.setText("");
-            // minimize keyboard
             InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             if(inputManager != null){
                 inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -116,41 +112,26 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-
-        // get task name and call presenter to addtask()
-        if( requestCode == NEW_TASK_REQUEST ){
-            if( resultCode == RESULT_OK ){
-
-                String new_task = data.getExtras().getString( AddTaskActivity.EXTRA_NEW_TASK );
-                if(!new_task.equals("")){
-                    tasksPresenter.addTask(new_task);
-                }
-            }
-        }
-        else if( requestCode == DROPBOX_BACKUP_REQUEST ){
+       if( requestCode == DROPBOX_BACKUP_REQUEST ){
             if( resultCode == RESULT_OK ){
                 if(data.getBooleanExtra(DropboxBackupActivity.EXTRA_REPLACE_TASKS, false)){
-                    // Load tasks obtained from Dropbox
-                    Log.d("MainListActivity", "Synced tasks file from Dropbox: ");
-                    Log.d("MainListActivity", data.getStringExtra(DropboxBackupActivity.EXTRA_SYNCED_TASKS_FILE));
-                    //TODO: tell presenter to overwrite tasks if dropbox file was downloaded
-                    // call presenter replace tasks function
-                    // ONLY IF shared-prefs has SYNC ON
+                    if(getSharedPreferences(getString(R.string.shared_prefs_file), MODE_PRIVATE).getBoolean(getString(R.string.prefs_dropbox_sync), false)){
+                        Log.d("MainListActivity", "Started sync, there is an existing Dropbox file, overwriting local tasks file.");
+                        tasksPresenter.loadTasks();
+                    }
                 }
                 else{
-                    Log.d("MainListActivity", "Dropbox Backup is turned OFF.");
+                    Log.d("MainListActivity", "No existing Dropbox file.");
                 }
-
             }
         }
-
     }
 
-    //TODO: onPause() function
-    // Call presenter saveTasks() function
-    // Pass in shared prefs of dropbox backup
+
+
+    // Save tasks and sync
     protected void onPause(){
         super.onPause();
-        tasksPresenter.saveTasks();
+        tasksPresenter.saveTasks(getSharedPreferences(getString(R.string.shared_prefs_file), MODE_PRIVATE).getBoolean(getString(R.string.prefs_dropbox_sync), false));
     }
 }

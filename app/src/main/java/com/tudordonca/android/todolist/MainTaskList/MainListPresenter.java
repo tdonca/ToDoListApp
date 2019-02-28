@@ -31,8 +31,7 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
 
     @Override
     public void loadTasks() {
-        // read tasks from local file
-        // show tasks
+        // load tasks from local file
         readTasks(tasksStorageFile);
         tasksView.showTasks(tasks);
     }
@@ -78,11 +77,14 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
 
 
     @Override
-    public void saveTasks() {
-        // save current tasks to the file
-        // look at passed-in shared-prefs for dropbox sync
-        // upload tasks file to dropbox
+    public void saveTasks(boolean dropboxSync) {
         writeTasks(tasksStorageFile);
+
+        // sync tasks to dropbox
+        if(dropboxSync){
+            Log.i("Presenter", "Uploading tasks file to dropbox for sync.");
+            // TODO: call networkUtils dropboxUploadFile
+        }
     }
 
 
