@@ -12,23 +12,21 @@ import com.tudordonca.android.todolist.R;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
-    //private ArrayList<String> dataset;
     private MainListContract.TaskListPresenter presenter;
 
-    public TaskAdapter(MainListContract.TaskListPresenter presenter){
-        //dataset = data;
+    TaskAdapter(MainListContract.TaskListPresenter presenter){
         this.presenter = presenter;
     }
 
 
     public class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
-        public TextView taskText;
+        TextView taskText;
 
-        public TaskViewHolder(@NonNull View itemView) {
+        TaskViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            taskText = (TextView) itemView.findViewById(R.id.task_textView);
+            taskText = itemView.findViewById(R.id.task_textView);
             itemView.setOnLongClickListener(this);
         }
 
@@ -37,7 +35,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         public boolean onLongClick(View v) {
             int position = getAdapterPosition();
             if(position != RecyclerView.NO_POSITION){
-                //dataset.remove(position);
                 presenter.removeTask(position);
                 notifyItemRemoved(position);
 
