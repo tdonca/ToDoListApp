@@ -7,4 +7,14 @@
     <string name="main_action_bar">My Tasks</string>
     <string name="create_a_new_task">Create a new task</string>
     <string name="create_button_text">Create</string>
+    <string name="menu_item_dropbox_backup">Dropbox Backup</string>
+    <string name="dropbox_app_key">o5wiisshllii8qt</string>
+    <string name="local_tasks_file">MyTasks.txt</string>
+    <string name="shared_prefs_file">com.tudordonca.android.todolist.tasksprefs</string>
+    <string name="prefs_dropbox_sync">dropbox-sync</string>
+    <string name="prefs_access_token">access-token</string>
+    <string name="sync_button_on">Stop Sync</string>
+    <string name="sync_button_off">Sync</string>
+    <string name="login_button_off">Login</string>
+    <string name="login_button_on">Logout</string>
 </resources>

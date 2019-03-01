@@ -293,7 +293,7 @@ MVP with Multiple Activities:
 		            android:parentActivityName=".MainListActivity">
 		            <meta-data
 		                android:name="android.support.PARENT_ACTIVITY"
-		                android:value="com.tudordonca.android.todolist.MainListActivity" />	
+		                android:value="com.tudordonca.android.todolist.MainTaskList.MainListActivity" />
 		        </activity>
 
 
@@ -439,3 +439,366 @@ Practice Creating a Test Recycler View in a new App:
 		Deleting the item from within the viewholder might be problematic, so instead do the deletion code outside ofthe viewholder
 			https://stackoverflow.com/questions/26076965/android-recyclerview-addition-removal-of-items
 			
+
+
+Avoiding data duplication and maintaining MVP with RecyclerView:
+	Create Interface for the adapter's ViewHolder for the Presenter to use
+	Give Adapter a reference to the Presenter
+	onBindViewHolder() and getItemCount() just call presenter functions (passing the ViewHolder so presenter can call its UI update functions)
+	onClick functions:
+		have ViewHolder call presenter functions using a reference when click events happen
+
+
+==================================================================01/09/19
+
+
+Background Async Processing and Network Connections:
+	
+	Main Thread -> UI, User Input, LifeCycle
+	Separate Thread -> Computations, File I/O, Network Comms
+
+	ThreadPools -> App in Foreground processing tasks, not necessary to finish
+	Foreground Serivce -> Immediate and important app work that can't be killed
+	WorkManager -> Deferrable background tasks that must get completed, but not urgent
+
+
+	AsyncTask:
+		onPreExecute() - setup in UI thread
+		doInBackground() - does the actual work in separate thread
+		onPostExecute() - receive result from task back in the UI thread
+		onCanceled() 
+
+		define a subclass of AsyncTask that implements doInBackground and onPostExecute()
+
+		Cancel the AsyncTask using cancel() from the calling thread
+		doInBackground() has to check isCancelled() frequently to stop when requested!
+		results in onCancelled() being called instead of onPostExecute()
+
+		Pitfall: if caller activity is destroyed(configuration change - screen rotation), the result is lost
+		and onPostExecute() never runs
+
+		Uses:	
+			1. Short or interruptible tasks
+			2. Tasks that don't need to report back once done
+			3. Low priority tasks that don't need to finish
+
+		FOR ANYTHING IMPORTANT, use ASYNCTASKLOADER from LOADER framework
+
+
+
+	AsyncTaskLoader:
+		LoaderManager manages data loaders in the activity
+
+		onCreateLoader()
+		onLoadFinished()
+		onLoaderReset()
+		loadInBackground()
+
+		Create a subclass of AsyncTaskLoader and implement the constructor and loadInBackground() 
+			public static class StringListLoader extends AsyncTaskLoader<List<String>> {}
+
+		Data survives configuration changes!
+
+
+-----------------
+
+
+AsyncTask test... sleep and update text:
+	1. create SleeperAsyncTask class
+		implement constructor, doInBackground(), onPostExecute()
+		have a weak reference to the textview we want to update
+		Thread.sleep() in doInBackground() for a set amount of time
+		update text in onPostExecute() using the weak reference
+
+	2. create instance of SleeperAsyncTask in Main Activity
+		new SleeperAsyncTask(textView).execute();
+
+
+====================================================================01/10/19
+
+
+Use AsyncTask to make a network connection:
+	
+	making a URI request to Google Books
+	
+	Encapsulate the network commuincations in a NetworkUtils class
+	Using a HttpURLConnection, BufferedReader
+	URI request is a URL with the search parameters appended at the end
+
+
+
+	Need App Permission to use Network Connections
+	In AndroidManifest:
+		<uses-permission android:name="android.permission.INTERNET" />
+    	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    Parsing JSON using Java Libraries:
+    	JSONObject
+    	JSONArray
+    	
+    Minimize keyboard once user finishes typing:
+    	InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(inputManager != null){
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+        searchText.setText("");
+
+
+    Double-Check connection availability before making any requests:
+
+
+
+Using the Dropbox API:
+	
+	1. Add build dependency in build.gradle:
+			implementation 'com.dropbox.core:dropbox-core-sdk:3.0.10'
+
+	2. Register the app in the Dropbox API App Console: https://www.dropbox.com/developers/apps
+		FirstAppTudor
+		Save Dropbox App Key in the project strings.xml
+
+	3. TESTING ONLY: generate a direct acess token from Dropbox App Console
+
+***********************************************
+DO NOT MAKE PROJECT PUBLIC TO GITHUB
+************************************************
+
+		This avoids having to use Oauth2 to log in to Dropbox
+		THIS IS UNSAFE!!!
+
+	4. Create a Dropbox Client:
+		DbxRequestConfig config = DbxRequestConfig.newBuilder("FirstAppTudor/1.0").build();
+        DbxClientV2 client = new DbxClientV2(config, ACCESS_TOKEN);
+
+
+
+
+
+===========================================================================01/11/19
+	
+	5. Download file from Dropbox:
+		File tasksFile = new File(filePath, fileName);
+		OutputStream outputStream = new FileOutputStream(tasksFile);
+		client.files().download("/" + fileName.toLowerCase()).download(outputStream);
+		***Don't forget about exception handling and closing the Stream***
+
+
+
+	6. Upload file to dropbox:
+		client.files().uploadBuilder("/" + fileName).uploadAndFinish(inputStream);
+		***Don't forget about exception handling and closing the Stream***
+
+
+
+Enabling Dropbox account login using OAuth2:
+	*****FILL OUT THE DETAILS SO I DON"T FORGET**************
+	*********************************************************
+	
+==========================================================================01/13/19
+
+
+ToDoList Redesign:
+	1. TaskList Activity 
+		Keep simple view with main activity add task button at the bottom
+		App Action Bar - overflow menu
+		Add list option for dropbox activity
+			Use this in Activity to load a menu.xml file with the option added:
+				public boolean onCreateOptionsMenu(Menu menu) {
+			        // Inflate the menu; this adds items to the action bar if it is present.
+			        getMenuInflater().inflate(R.menu.menu_main, menu);
+			        return true;
+			    }
+		The onClick function requires a MenuItem, not a View:
+			public void dropboxBackup(MenuItem mi){...}
+
+
+	2. DropboxBackup Activity
+		add dropbox libraries as an app dependency:
+			implementation 'com.dropbox.core:dropbox-core-sdk:3.0.10'
+		register the app on the dropbox website
+		save app key to strings.xml
+
+
+		copied over stuff from the OAuth2 App
+		create AsyncTask to get account info and saved tasks:
+
+=========================================================================01/13/19
+	
+		hold async task in Presenter
+
+
+
+
+Specifications:
+	MainActivity:
+		onCreate():
+			presenter - create dbclient (factory)
+			presenter - load tasks (db file or local file)
+			view - set up recycler view
+
+		onResume():
+			presenter - resume
+			view - showTasks
+
+		onClick():
+			remove - view - remove from recyclerview and update UI - presenter - remove task
+			add - presenter - add task - view - update recyclerview
+			dropbox - presenter - call view launch db activity
+
+		onPause():
+			presenter - save tasks to file or dropbox based on shared preferences
+
+
+
+	DropboxAccountActivity:
+		onCreate():
+			presenter - get shared preferences and access token if already logged in
+			view - set up account display
+
+		onResume():
+			view - get shared prefs from Android
+			presenter - if shared prefs, load data - view - show account info and logout options
+						if no prefs, view - show login options
+
+
+
+		onClick():
+			login - presenter - dbclient download file
+					if db file exists - download it and save tasks to db-local-file - save shared prefs of login and token
+					if no db file - save shared prefs login and token
+				  - view - finish activity and return bool overwrite and file of tasks
+			logout - presenter - update shared prefs
+			       - view - finish activity
+ 
+
+
+			       
+	
+
+	Shared Preferences:
+		Create the prefs file:
+			private String sharedPrefFile = "com.example.android.hellosharedprefs";
+			mPreferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+
+
+
+===============================================================2/6/19
+
+
+Finalize the App:
+	1. Main Activity
+		RecyclerView list with the add button and entry field at the bottom of the page
+		On Startup:
+			Loads tasks from local file
+		Add tasks using the bottom button
+		Remove tasks using long-click
+		On Pause:
+			Save current tasks list to local file
+			If connected to Dropbox(shared prefs)
+				upload local tasks file to Dropbox
+
+
+	2. Dropbox Backup Activity
+		Button to login to Dropbox using OAuth2
+		save token to shared-prefs
+		
+		Sync button to start saving tasks to Dropbox
+		Save the sync setting to shared-prefs
+		If tasks file already exists on Dropbox:
+			Download it and save it to the local tasks file
+		Sync button changes to "Unsync" button
+
+		Keep Download/Upload file functions in DropBox utils
+		Just call the functions directly for now
+		Ask Steve how to handle Asynchronous (probably not AsyncTask) also in onPause to do final network upload
+			Retrofit? but Dropbox already has API client interfaces
+
+==================================================================2/11/19
+
+
+Removing taskslist array redundancy. Have The View and the Adapter just access the data directly from the presenter
+Right now the adapter is double deleting since its deleting the data, and then telling the presenter to also delete the data
+
+
+1. Read from shared prefs if "dropbox-sync" is enbled
+2. Move dropbox calls to NetworkUtils static class
+	getDropboxAccount()
+	downloadDropboxFile()
+	uploadDropboxFile()
+3. Call networkutils directly in presenter code, worry about Async later
+
+
+
+Checking shared prefs:
+	getSharedPreferences("mytasksapp", MODE_PRIVATE).getBoolean("dropbox-sync", false)
+
+
+
+==================================================================2/27/19
+
+
+Tasks Activity:
+	Upload File to Dropbox
+
+Dropbox Activity:
+	Download File from Dropbox
+	Get Account Info from Dropbox
+
+
+
+==================================================================2/28/19
+
+Network Utils:
+	getDropboxAccount():
+	downloadDropboxFile()
+	uploadDropboxFile()
+
+
+
+*************
+Cannot Run Network Calls in UI Thread:
+	I have to use Service to do the network call
+	Service uses main thread by default, so I need to call a new thread
+	IntentService - handles worker thread for you
+	So in onPause, call an IntentService, and run the dropbox upload call there
+
+AsyncTask for login account call
+IntentService for save tasks onPause
+
+
+
+
+When to do network calls?
+	Do loads/backups in onResume and onPause. 
+	Network calls have to be done off the main UI thread, so use AsyncTask for simple things that happen while the app is still open.
+	This means do loads in onResume using AsyncTask.
+	Use IntentService to do cleanup when the app is closing. Have to call AsyncTask inside of IntentService so that is off the main UI Thread.
+
+DONE! WORKING!
+
+=================================================================3/1/19
+
+Final Cleanup:
+	(+)1. Add option to logout of dropbox account
+	(+)2. Add toast in Dropbox activity after login stating that sync will overwrite current tasks
+	(+)3. Stop keyboard from popping up when opening the app back up
+	(+)3.5. Change Dropbox settings to allow other accounts to use the app
+	4. Add new pictures and update on Google Play Store, link to github
+	5. Clean up github branches, fill out README, add design diagram, link to google play store
+	6. Email Steve
+	7. Email Howard
+
+
+
+
+
+
+
+___________________________________
+===================================
+-----------------------------------
+
+Steve Questions:
+	1. Dagger - used to create Android Java client for a WEB API?
+		In the case of Dropbox, not needed since they already have a client?
+
