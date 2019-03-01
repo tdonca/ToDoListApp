@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".maintasklist.MainListActivity"
-            android:label="@string/main_action_bar">
+            android:label="@string/main_action_bar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".dropboxaccount.DropboxBackupActivity"
-            android:label="Connect to Dropbox">
+            android:label="Connect to Dropbox"
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tudordonca.android.todolist.maintasklist.MainListActivity" />

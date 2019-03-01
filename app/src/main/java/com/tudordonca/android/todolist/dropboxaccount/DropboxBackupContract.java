@@ -8,7 +8,9 @@ public interface DropboxBackupContract {
 
         void showAccountData(String name, String email, String type);
 
-        void hideAccountData();
+        void clearAccountData();
+
+        void showDropboxAccountFailToast(String error);
 
         void deliverIntentResult(Boolean replaceLocal, ArrayList<String> tasks);
 

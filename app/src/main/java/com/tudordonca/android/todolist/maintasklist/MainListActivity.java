@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +45,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         tasksPresenter = new MainListPresenter(this, getFilesDir().toString(), getString(R.string.local_tasks_file) );
 
         addTaskText = findViewById(R.id.new_task_edit);
+        addTaskText.setText(null);
 
         // Tasks Recycler View
         taskRecyclerView = findViewById(R.id.task_list_recycler_view);
@@ -59,7 +61,8 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
 
         // display help toast
-        Toast.makeText(this, "Tap and hold to remove tasks", Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, "Tap and hold to remove tasks", Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 
@@ -71,6 +74,8 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
 
     protected void onResume(){
         super.onResume();
+        // remove cursor from edittext
+        addTaskText.clearFocus();
         tasksPresenter.loadTasks();
     }
 
@@ -96,8 +101,9 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         if(!taskText.equals("")){
             tasksPresenter.addTask(taskText);
 
-            // clear input and keyboard
-            addTaskText.setText("");
+            // clear input, focus, and keyboard
+            addTaskText.setText(null);
+            addTaskText.clearFocus();
             InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             if(inputManager != null){
                 inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);

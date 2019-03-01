@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
 
     private DropboxBackupContract.View UIView;
-    DropboxAccountTask.Callback accountCallback;
-    DropboxDownloadFileTask.Callback downloadCallback;
+    private DropboxAccountTask.Callback accountCallback;
+    private DropboxDownloadFileTask.Callback downloadCallback;
     private String filepath;
     private String filename;
     private ArrayList<String> tasks;
@@ -41,7 +41,8 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
             @Override
             public void onError() {
                 Log.e("DropboxBackupPresenter","Could not get account data from Dropbox to display!");
-                UIView.hideAccountData();
+                UIView.clearAccountData();
+                UIView.showDropboxAccountFailToast("Invalid access token");
             }
         };
         new DropboxAccountTask(DropboxClientFactory.getClient(), accountCallback).execute();

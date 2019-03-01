@@ -15,4 +15,6 @@
     <string name="prefs_access_token">access-token</string>
     <string name="sync_button_on">Stop Sync</string>
     <string name="sync_button_off">Sync</string>
+    <string name="login_button_off">Login</string>
+    <string name="login_button_on">Logout</string>
 </resources>

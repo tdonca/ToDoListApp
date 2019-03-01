@@ -746,6 +746,8 @@ Dropbox Activity:
 
 
 
+==================================================================2/28/19
+
 Network Utils:
 	getDropboxAccount():
 	downloadDropboxFile()
@@ -764,12 +766,39 @@ AsyncTask for login account call
 IntentService for save tasks onPause
 
 
+
+
+When to do network calls?
+	Do loads/backups in onResume and onPause. 
+	Network calls have to be done off the main UI thread, so use AsyncTask for simple things that happen while the app is still open.
+	This means do loads in onResume using AsyncTask.
+	Use IntentService to do cleanup when the app is closing. Have to call AsyncTask inside of IntentService so that is off the main UI Thread.
+
+DONE! WORKING!
+
+=================================================================3/1/19
+
+Final Cleanup:
+	(+)1. Add option to logout of dropbox account
+	(+)2. Add toast in Dropbox activity after login stating that sync will overwrite current tasks
+	(+)3. Stop keyboard from popping up when opening the app back up
+	(+)3.5. Change Dropbox settings to allow other accounts to use the app
+	4. Add new pictures and update on Google Play Store, link to github
+	5. Clean up github branches, fill out README, add design diagram, link to google play store
+	6. Email Steve
+	7. Email Howard
+
+
+
+
+
+
+
+___________________________________
 ===================================
+-----------------------------------
 
 Steve Questions:
 	1. Dagger - used to create Android Java client for a WEB API?
 		In the case of Dropbox, not needed since they already have a client?
-	2. When to do network calls/database loads/backups? 
-		onPause/onResume?
-	3. How to do Async work if they are called onPause/onResume? Best to use Service?
 
