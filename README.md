@@ -1,4 +1,4 @@
-# ToDoListApp
+# My Tasks - To Do List App
 
 Implements:
 - MVP
