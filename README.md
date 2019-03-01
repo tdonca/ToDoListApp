@@ -5,6 +5,7 @@ Implements:
 - Multiple Activities
 - RecyclerView
 - Dropbox API
+- OAuth2
 - AsyncTask
 - IntentService
   
