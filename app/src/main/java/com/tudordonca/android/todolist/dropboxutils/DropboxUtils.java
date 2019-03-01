@@ -3,6 +3,7 @@ package com.tudordonca.android.todolist.dropboxutils;
 import android.util.Log;
 
 import com.dropbox.core.v2.DbxClientV2;
+import com.dropbox.core.v2.files.WriteMode;
 import com.dropbox.core.v2.users.FullAccount;
 
 import java.io.File;
@@ -37,7 +38,7 @@ public class DropboxUtils {
             InputStream inputStream = new FileInputStream(tasksFile);
             try{
                 Log.d(LOG_TAG, "Uploading tasks file to dropbox...");
-                client.files().uploadBuilder("/" + fileName).uploadAndFinish(inputStream);
+                client.files().uploadBuilder("/" + fileName).withMode(WriteMode.OVERWRITE).uploadAndFinish(inputStream);
                 saved = true;
             }
             catch(Exception e){

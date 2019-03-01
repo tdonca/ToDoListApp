@@ -1,6 +1,9 @@
 package com.tudordonca.android.todolist.maintasklist;
 
+import android.content.Intent;
 import android.util.Log;
+
+import com.tudordonca.android.todolist.dropboxutils.DropboxUploadTasksService;
 
 import org.apache.commons.io.FileUtils;
 
@@ -81,7 +84,7 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
         // sync tasks to dropbox
         if(dropboxSync){
             Log.i("Presenter", "Uploading tasks file to dropbox for sync.");
-            // TODO: call networkUtils dropboxUploadFile
+            tasksView.launchDropboxUploadTasksService();
         }
     }
 

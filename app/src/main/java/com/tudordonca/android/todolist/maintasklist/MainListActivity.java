@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.tudordonca.android.todolist.dropboxaccount.DropboxBackupActivity;
 import com.tudordonca.android.todolist.R;
+import com.tudordonca.android.todolist.dropboxutils.DropboxUploadTasksService;
 
 import java.util.ArrayList;
 
@@ -134,5 +135,12 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         Boolean sync = getSharedPreferences(getString(R.string.shared_prefs_file), MODE_PRIVATE).getBoolean(getString(R.string.prefs_dropbox_sync), false);
         Log.e("MainListActivity","Sync Setting: " + sync);
         tasksPresenter.saveTasks(sync);
+    }
+
+    public void launchDropboxUploadTasksService(){
+        Intent uploadIntent = new Intent(this, DropboxUploadTasksService.class);
+        uploadIntent.putExtra(DropboxUploadTasksService.PARAM_FILEDIR, getFilesDir().toString());
+        uploadIntent.putExtra(DropboxUploadTasksService.PARAM_FILENAME, getString(R.string.local_tasks_file));
+        startService(uploadIntent);
     }
 }

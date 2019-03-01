@@ -16,6 +16,7 @@ public interface MainListContract {
 
         void showDropboxBackupUI();
 
+        void launchDropboxUploadTasksService();
     }
 
 

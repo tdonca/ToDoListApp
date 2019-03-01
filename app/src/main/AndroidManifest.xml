@@ -45,6 +45,9 @@
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".dropboxutils.DropboxUploadTasksService"
+            android:exported="false"/>
 
     </application>
 
