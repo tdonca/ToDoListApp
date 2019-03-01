@@ -9,7 +9,6 @@ public class DropboxClientFactory {
 
     public static void init(String accessToken) {
         if (sDbxClient == null) {
-            //TODO: change client identifier
             DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("com.tudordonca.android.todolist")
                     .build();
 

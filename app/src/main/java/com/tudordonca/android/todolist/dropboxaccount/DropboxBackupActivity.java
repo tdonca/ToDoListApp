@@ -143,17 +143,6 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
             //login
             Log.i("DropboxBackupActivity", "Launching OAuth2 Authentication...");
             Auth.startOAuth2Authentication(DropboxBackupActivity.this, getString(R.string.dropbox_app_key));
-//            accessToken = Auth.getOAuth2Token();
-//            if (accessToken != null) {
-//                Log.i("DropboxBackupActivity", "Logging in...");
-//                preferences.edit().putString(getString(R.string.prefs_access_token), accessToken).apply();
-//                presenter.loadAccount(accessToken);
-//
-//            }
-//            else{
-//                Log.e("DropboxBackupActivity","Failed to login... cannot get access token from OAuth!");
-//                showDropboxAccountFailToast("No access token");
-//            }
         }
 
     }
