@@ -13,7 +13,7 @@ public class DropboxAccountTask extends AsyncTask<Void, Void, FullAccount> {
     private final Callback callback;
 
 
-    DropboxAccountTask(DbxClientV2 client, Callback callback){
+    public DropboxAccountTask(DbxClientV2 client, Callback callback){
 
         this.client = client;
         this.callback = callback;
