@@ -1,4 +1,4 @@
-package com.tudordonca.android.todolist.DropboxAccount;
+package com.tudordonca.android.todolist.dropboxaccount;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,9 @@ public interface DropboxBackupContract {
 
     interface View {
 
-        public void showAccountData(String name, String email, String type);
+        void showAccountData(String name, String email, String type);
+
+        void hideAccountData();
 
         void deliverIntentResult(Boolean replaceLocal, ArrayList<String> tasks);
 

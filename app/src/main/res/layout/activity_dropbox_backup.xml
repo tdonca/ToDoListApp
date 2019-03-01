@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DropboxAccount.DropboxBackupActivity">
+    tools:context=".dropboxaccount.DropboxBackupActivity">
 
 
     <LinearLayout
@@ -37,12 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/saved_tasks_text"
-            android:inputType="textMultiLine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
 
         <Button
             android:id="@+id/sync_button"
@@ -51,12 +45,6 @@
             android:text="Sync"
             android:onClick="onSyncData"/>
 
-        <TextView
-            android:id="@+id/tasks_text"
-            android:inputType="textMultiLine"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
 
     </LinearLayout>
 

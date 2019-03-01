@@ -1,4 +1,4 @@
-package com.tudordonca.android.todolist.MainTaskList;
+package com.tudordonca.android.todolist.maintasklist;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tudordonca.android.todolist.R;
-
-import java.util.ArrayList;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 

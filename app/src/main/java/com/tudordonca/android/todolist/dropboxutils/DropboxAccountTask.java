@@ -1,41 +1,32 @@
-package com.tudordonca.android.todolist.DropboxAccount;
+package com.tudordonca.android.todolist.dropboxutils;
 
 import android.os.AsyncTask;
 
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.users.FullAccount;
 
-import java.util.ArrayList;
+
 
 public class DropboxAccountTask extends AsyncTask<Void, Void, FullAccount> {
 
-    private final DbxClientV2 dbxClient;
+    private final DbxClientV2 client;
     private final Callback callback;
-    private Exception exception;
 
-    DropboxAccountTask(DbxClientV2 dbxClient, Callback callback){
 
-        this.dbxClient = dbxClient;
+    DropboxAccountTask(DbxClientV2 client, Callback callback){
+
+        this.client = client;
         this.callback = callback;
-        this.exception = null;
     }
 
     public interface Callback {
         void onComplete(FullAccount result);
-        void onError(Exception e);
+        void onError();
     }
 
     @Override
     protected FullAccount doInBackground(Void... voids) {
-
-        try{
-            return dbxClient.users().getCurrentAccount();
-        }
-        catch(Exception e){
-            exception = e;
-        }
-
-        return null;
+        return DropboxUtils.getDropboxAccount(client);
     }
 
     protected void onPostExecute(FullAccount account){
@@ -43,7 +34,7 @@ public class DropboxAccountTask extends AsyncTask<Void, Void, FullAccount> {
             callback.onComplete(account);
         }
         else{
-            callback.onError(exception);
+            callback.onError();
         }
     }
 }

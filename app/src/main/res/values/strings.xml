@@ -9,7 +9,7 @@
     <string name="create_button_text">Create</string>
     <string name="menu_item_dropbox_backup">Dropbox Backup</string>
     <string name="dropbox_app_key">o5wiisshllii8qt</string>
-    <string name="local_tasks_file">DB-MyTasks.txt</string>
+    <string name="local_tasks_file">MyTasks.txt</string>
     <string name="shared_prefs_file">com.tudordonca.android.todolist.tasksprefs</string>
     <string name="prefs_dropbox_sync">dropbox-sync</string>
     <string name="prefs_access_token">access-token</string>

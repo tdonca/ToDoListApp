@@ -1,4 +1,4 @@
-package com.tudordonca.android.todolist.MainTaskList;
+package com.tudordonca.android.todolist.maintasklist;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.tudordonca.android.todolist.AddTaskActivity;
-import com.tudordonca.android.todolist.DropboxAccount.DropboxBackupActivity;
+import com.tudordonca.android.todolist.dropboxaccount.DropboxBackupActivity;
 import com.tudordonca.android.todolist.R;
 
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
         setContentView(R.layout.activity_main_list);
 
         // create presenter
-        tasksPresenter = new MainListPresenter(this, getFilesDir().toString() );
+        tasksPresenter = new MainListPresenter(this, getFilesDir().toString(), getString(R.string.local_tasks_file) );
 
         addTaskText = findViewById(R.id.new_task_edit);
 

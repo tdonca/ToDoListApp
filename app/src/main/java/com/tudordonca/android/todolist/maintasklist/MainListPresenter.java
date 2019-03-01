@@ -1,8 +1,6 @@
-package com.tudordonca.android.todolist.MainTaskList;
+package com.tudordonca.android.todolist.maintasklist;
 
 import android.util.Log;
-
-import com.tudordonca.android.todolist.MainTaskList.MainListContract;
 
 import org.apache.commons.io.FileUtils;
 
@@ -16,11 +14,11 @@ public class MainListPresenter implements MainListContract.TaskListPresenter {
     private File tasksStorageFile;
 
 
-    public MainListPresenter( MainListContract.TaskListView tasksListView, String fileFolder ){
+    public MainListPresenter( MainListContract.TaskListView tasksListView, String fileFolder , String fileName){
 
         tasksView = tasksListView;
         tasks = new ArrayList<>();
-        tasksStorageFile = new File(fileFolder, "MyTasks.txt");
+        tasksStorageFile = new File(fileFolder, fileName);
     }
 
 

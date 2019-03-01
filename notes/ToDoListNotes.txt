@@ -747,9 +747,21 @@ Dropbox Activity:
 
 
 Network Utils:
-	
+	getDropboxAccount():
+	downloadDropboxFile()
+	uploadDropboxFile()
 
 
+
+*************
+Cannot Run Network Calls in UI Thread:
+	I have to use Service to do the network call
+	Service uses main thread by default, so I need to call a new thread
+	IntentService - handles worker thread for you
+	So in onPause, call an IntentService, and run the dropbox upload call there
+
+AsyncTask for login account call
+IntentService for save tasks onPause
 
 
 ===================================

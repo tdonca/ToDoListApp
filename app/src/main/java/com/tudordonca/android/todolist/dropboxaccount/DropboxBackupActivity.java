@@ -1,4 +1,4 @@
-package com.tudordonca.android.todolist.DropboxAccount;
+package com.tudordonca.android.todolist.dropboxaccount;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +25,7 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dropbox_backup);
 
-        presenter = new DropboxBackupPresenter(this, getString(R.string.local_tasks_file));
+        presenter = new DropboxBackupPresenter(this, getFilesDir().toString(), getString(R.string.local_tasks_file));
 
         preferences = getSharedPreferences(getString(R.string.shared_prefs_file), MODE_PRIVATE);
 
@@ -56,7 +56,7 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
             }
             else{
                 hideAccountData();
-                Log.d("DropboxBackupActivity","On Resume Does Not Have Token");
+                Log.e("DropboxBackupActivity","On Resume Does Not Have Token");
             }
         } else {
             presenter.loadAccount(accessToken);

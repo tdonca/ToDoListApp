@@ -1,13 +1,10 @@
-package com.tudordonca.android.todolist.MainTaskList;
+package com.tudordonca.android.todolist.maintasklist;
 
 
     /* Contract between Model, View, and Presenter for the Main Task List Activity
     *
     * */
 
-import android.content.Intent;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public interface MainListContract {

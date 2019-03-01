@@ -1,4 +1,4 @@
-package com.tudordonca.android.todolist.DropboxUtils;
+package com.tudordonca.android.todolist.dropboxutils;
 
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.v2.DbxClientV2;
@@ -10,7 +10,7 @@ public class DropboxClientFactory {
     public static void init(String accessToken) {
         if (sDbxClient == null) {
             //TODO: change client identifier
-            DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("examples-v2-demo")
+            DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("com.tudordonca.android.todolist")
                     .build();
 
             sDbxClient = new DbxClientV2(requestConfig, accessToken);
