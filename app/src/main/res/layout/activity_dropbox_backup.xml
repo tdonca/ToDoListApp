@@ -42,8 +42,8 @@
             android:id="@+id/sync_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sync"
-            android:onClick="onSyncData"/>
+            android:text="@string/sync_button_off"
+            android:onClick="onToggleSyncData"/>
 
 
     </LinearLayout>

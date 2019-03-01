@@ -131,6 +131,8 @@ public class MainListActivity extends AppCompatActivity implements MainListContr
     // Save tasks and sync
     protected void onPause(){
         super.onPause();
-        tasksPresenter.saveTasks(getSharedPreferences(getString(R.string.shared_prefs_file), MODE_PRIVATE).getBoolean(getString(R.string.prefs_dropbox_sync), false));
+        Boolean sync = getSharedPreferences(getString(R.string.shared_prefs_file), MODE_PRIVATE).getBoolean(getString(R.string.prefs_dropbox_sync), false);
+        Log.e("MainListActivity","Sync Setting: " + sync);
+        tasksPresenter.saveTasks(sync);
     }
 }

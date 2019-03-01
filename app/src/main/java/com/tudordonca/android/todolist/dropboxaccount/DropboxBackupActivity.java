@@ -26,7 +26,6 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
         setContentView(R.layout.activity_dropbox_backup);
 
         presenter = new DropboxBackupPresenter(this, getFilesDir().toString(), getString(R.string.local_tasks_file));
-
         preferences = getSharedPreferences(getString(R.string.shared_prefs_file), MODE_PRIVATE);
 
         // Setup Dropbox login button
@@ -38,6 +37,16 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
             }
         });
 
+        // Setup Sync button
+        Button syncButton = (Button) findViewById(R.id.sync_button);
+        Boolean sync = preferences.getBoolean(getString(R.string.prefs_dropbox_sync), false);
+        Log.e("DropboxBackupActivity","Sync Setting: " + sync);
+        if(sync){
+            syncButton.setText(getString(R.string.sync_button_on));
+        }
+        else{
+            syncButton.setText(getString(R.string.sync_button_off));
+        }
 
 
 
@@ -89,11 +98,22 @@ public class DropboxBackupActivity extends AppCompatActivity implements DropboxB
 
 
     // start sync
-    public void onSyncData(View view){
-        preferences.edit().putBoolean(getString(R.string.prefs_dropbox_sync), true).apply();
-        presenter.syncData();
+    public void onToggleSyncData(View view){
+        Boolean currentSyncOn = preferences.getBoolean(getString(R.string.prefs_dropbox_sync), false);
+        if(currentSyncOn){
+            Log.i("DropboxBackupActivity","Turning Dropbox Sync OFF...");
+            preferences.edit().putBoolean(getString(R.string.prefs_dropbox_sync), false).apply();
+            ((Button)findViewById(R.id.sync_button)).setText(getString(R.string.sync_button_off));
 
-        // TODO: add unsync option
+        }
+        else{
+            Log.i("DropboxBackupActivity","Turning Dropbox Sync ON...");
+            preferences.edit().putBoolean(getString(R.string.prefs_dropbox_sync), true).apply();
+            ((Button)findViewById(R.id.sync_button)).setText(getString(R.string.sync_button_on));
+            presenter.syncData();
+        }
+
+
     }
 
 

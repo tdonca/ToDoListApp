@@ -30,10 +30,7 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
 
     public void loadAccount(String accessToken){
         DropboxClientFactory.init(accessToken);
-        //TODO: replace with asynctask
-
-
-
+        // get Dropbox account asynchronously
         accountCallback = new DropboxAccountTask.Callback() {
             @Override
             public void onComplete(FullAccount result) {
@@ -48,21 +45,28 @@ public class DropboxBackupPresenter implements DropboxBackupContract.Presenter {
             }
         };
         new DropboxAccountTask(DropboxClientFactory.getClient(), accountCallback).execute();
-        
+
     }
 
 
 
     public void syncData(){
-        //TODO: replace with asynctask
-        if(DropboxUtils.downloadDropboxFile(DropboxClientFactory.getClient(), filepath, filename)) {
-            Log.i("DropboxBackupPresenter","Starting sync: Found remote file, replaced local file.");
-            UIView.deliverIntentResult(true, tasks);
-        }
-        else{
-            Log.i("DropboxBackupPresenter","Starting sync: No remote file.");
-            UIView.deliverIntentResult(false, tasks);
-        }
+        // download Dropbox tasks file asynchronously
+        downloadCallback = new DropboxDownloadFileTask.Callback() {
+            @Override
+            public void onComplete() {
+                Log.i("DropboxBackupPresenter","Starting sync: Found remote file, replaced local file.");
+                UIView.deliverIntentResult(true, tasks);
+            }
+
+            @Override
+            public void onError() {
+                Log.i("DropboxBackupPresenter","Starting sync: No remote file.");
+                UIView.deliverIntentResult(false, tasks);
+            }
+        };
+        new DropboxDownloadFileTask(DropboxClientFactory.getClient(), downloadCallback, filepath, filename).execute();
+
     }
 
 

@@ -17,7 +17,7 @@ public class DropboxUploadFileTask extends AsyncTask<Void, Void, Boolean> {
         void onError();
     }
 
-    DropboxUploadFileTask(DbxClientV2 client, Callback callback, String directory, String filename){
+    public DropboxUploadFileTask(DbxClientV2 client, Callback callback, String directory, String filename){
         this.client = client;
         this.callback = callback;
         this.directory = directory;

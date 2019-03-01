@@ -13,4 +13,6 @@
     <string name="shared_prefs_file">com.tudordonca.android.todolist.tasksprefs</string>
     <string name="prefs_dropbox_sync">dropbox-sync</string>
     <string name="prefs_access_token">access-token</string>
+    <string name="sync_button_on">Stop Sync</string>
+    <string name="sync_button_off">Sync</string>
 </resources>
